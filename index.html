@@ -820,6 +820,52 @@
   /* mini chart in card */
   .mini-chart { width: 100%; height: 60px; margin-top: 1rem; }
 
+  /* ─── FEEDBACK WIDGET ─── */
+  .feedback-widget {
+    position: fixed; right: 1.75rem; bottom: 1.75rem; z-index: 1400;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 0.75rem;
+  }
+  .feedback-btn {
+    display: inline-flex; align-items: center; gap: 0.55rem;
+    background: linear-gradient(135deg, var(--blue), var(--blue-bright));
+    color: var(--white); border: none; cursor: pointer;
+    padding: 0.85rem 1.3rem; border-radius: 999px;
+    font-family: var(--font-body); font-weight: 700; font-size: 0.85rem;
+    box-shadow: var(--shadow); transition: var(--transition);
+  }
+  .feedback-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(45,110,240,0.45); }
+  .feedback-btn-icon { font-size: 1rem; }
+  .feedback-card {
+    width: 300px; max-width: calc(100vw - 3rem);
+    background: var(--navy-light); border: 1px solid var(--border-mid);
+    border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 1.5rem; position: relative;
+    opacity: 0; visibility: hidden; transform: translateY(12px) scale(0.97);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s linear 0.25s;
+  }
+  .feedback-card.open {
+    opacity: 1; visibility: visible; transform: translateY(0) scale(1);
+    pointer-events: auto; transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .feedback-close {
+    position: absolute; top: 0.75rem; right: 0.75rem;
+    background: none; border: none; color: var(--white-muted);
+    font-size: 1.15rem; line-height: 1; cursor: pointer; padding: 0.25rem;
+  }
+  .feedback-close:hover { color: var(--white); }
+  .feedback-card .feedback-icon { font-size: 1.5rem; margin-bottom: 0.6rem; }
+  .feedback-card h4 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .feedback-card p { font-size: 0.85rem; color: var(--white-dim); line-height: 1.55; margin-bottom: 1.1rem; }
+  .feedback-cta {
+    display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+    background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+    color: var(--navy); font-weight: 700; font-size: 0.82rem;
+    padding: 0.7rem 1.1rem; border-radius: 8px;
+    text-decoration: none; transition: var(--transition); width: 100%;
+  }
+  .feedback-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(201,168,76,0.35); }
+
   /* ─── RESPONSIVE ─── */
   @media (max-width: 1024px) {
     .card-grid-3 { grid-template-columns: repeat(2,1fr); }
@@ -847,6 +893,9 @@
     section { padding: 3.5rem 5%; }
     .manifesto { padding: 2rem; }
     .manifesto p { font-size: 1.05rem; }
+    .feedback-widget { right: 1.1rem; bottom: 1.1rem; }
+    .feedback-btn-label { display: none; }
+    .feedback-btn { padding: 0.85rem; border-radius: 50%; }
   }
 </style>
 </head>
@@ -1894,6 +1943,7 @@
     <div class="footer-col">
       <h5>Resources</h5>
       <a onclick="navigateTo('faq')">FAQ</a>
+      <a href="https://prettyform.addxt.com/a/form/vf/1FAIpQLSe7m-OJROKLsp0qId8hSMt2YqZR8WmJDDLjBbHg7KIRRYXtAg" target="_blank" rel="noopener">Feedback</a>
       <a href="mailto:atharvachavanke@gmail.com">Press Inquiries</a>
       <a href="mailto:atharvachavanke@gmail.com">Investor Relations</a>
       <a href="mailto:atharvachavanke@gmail.com">Partnerships</a>
@@ -1907,6 +1957,23 @@
     </div>
   </div>
 </footer>
+
+<!-- ═══════════════════════════════════
+     FEEDBACK WIDGET
+═══════════════════════════════════ -->
+<div class="feedback-widget">
+  <div class="feedback-card" id="feedbackCard">
+    <button class="feedback-close" onclick="toggleFeedback()" aria-label="Close">×</button>
+    <div class="feedback-icon">💬</div>
+    <h4>Help Shape NIVX</h4>
+    <p>Your input directly shapes our roadmap — tell us what's working, what's missing, and what you'd like to see next.</p>
+    <a class="feedback-cta" href="https://prettyform.addxt.com/a/form/vf/1FAIpQLSe7m-OJROKLsp0qId8hSMt2YqZR8WmJDDLjBbHg7KIRRYXtAg" target="_blank" rel="noopener">Share Your Feedback →</a>
+  </div>
+  <button class="feedback-btn" id="feedbackBtn" onclick="toggleFeedback()" aria-label="Give feedback" aria-expanded="false">
+    <span class="feedback-btn-icon">💬</span>
+    <span class="feedback-btn-label">Feedback</span>
+  </button>
+</div>
 
 <!-- ═══════════════════════════════════
      SCRIPTS
@@ -1925,6 +1992,20 @@ function navigateTo(page) {
 function toggleMenu() {
   document.getElementById('mobileMenu').classList.toggle('open');
 }
+
+// ─── FEEDBACK WIDGET ───
+function toggleFeedback() {
+  const card = document.getElementById('feedbackCard');
+  const isOpen = card.classList.toggle('open');
+  document.getElementById('feedbackBtn').setAttribute('aria-expanded', isOpen);
+}
+document.addEventListener('click', (e) => {
+  const widget = document.querySelector('.feedback-widget');
+  if (widget && !widget.contains(e.target)) {
+    document.getElementById('feedbackCard').classList.remove('open');
+    document.getElementById('feedbackBtn').setAttribute('aria-expanded', 'false');
+  }
+});
 
 // ─── SCROLL NAV ───
 window.addEventListener('scroll', () => {
