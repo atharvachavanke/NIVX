@@ -11,37 +11,49 @@
 <title>NIVX — Future of Digital Ownership</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=general-sans@400,500,600,700&f[]=satoshi@400,500,600,700&display=swap">
 <style>
   :root {
-    --navy: #ffffff;
-    --navy-mid: #f6f7fa;
-    --navy-light: #eef0f5;
-    --navy-surface: #ebeef4;
-    --blue: #1e56c8;
-    --blue-bright: #2d6ef0;
-    --blue-pale: #3d82ff;
-    --gold: #c9a84c;
-    --gold-bright: #e0b955;
-    --gold-light: #f2d06b;
-    --green: #1aad6e;
-    --green-bright: #22c97e;
-    --white: #0d121e;
-    --white-dim: #47536b;
-    --white-muted: #69748c;
-    --border: rgba(13,18,30,0.08);
-    --border-mid: rgba(13,18,30,0.14);
-    --card-bg: rgba(241,244,250,0.75);
-    --card-bg-hover: rgba(231,236,247,0.9);
-    --navy-fixed: #0a0f1e;
-    --white-fixed: #f4f6fb;
-    --font-display: 'Playfair Display', serif;
+    /* ── Core palette ── */
+    --navy: #FAFAF8;              /* page background */
+    --navy-mid: #F7F5F2;          /* alt layered background / footer */
+    --navy-light: #F1EEE7;        /* subtle gradient partner */
+    --navy-surface: #F7F5F2;      /* recessed section band */
+    --blue: #0B1220;              /* ink — primary CTAs */
+    --blue-bright: #1A2438;       /* ink hover */
+    --blue-pale: #3B4B63;         /* muted slate accent (data labels) */
+    --gold: #C8A96A;              /* brand accent — decorative / large scale */
+    --gold-bright: #7A5F2E;       /* accent — accessible for text */
+    --gold-light: #DCC79A;        /* pale accent tint */
+    --green: #0EA56B;             /* success — large / bold use */
+    --green-bright: #0A7A50;      /* success — small text use */
+    --error: #A3342A;             /* error / failed state */
+    --error-soft: rgba(163,52,42,0.08);
+    --error-border: rgba(163,52,42,0.22);
+    --white: #0B1220;             /* primary text (ink) */
+    --white-dim: #6B7280;         /* secondary text */
+    --white-muted: #9CA3AF;       /* tertiary / micro text */
+    --border: #E5E7EB;
+    --border-mid: #D1D5DB;
+    --card-bg: #FFFFFF;
+    --card-bg-hover: #FFFFFF;
+    --navy-fixed: #0B1220;        /* ink, fixed regardless of context */
+    --white-fixed: #FAFAF8;       /* light text on dark surfaces */
+    --icon-chip: rgba(11,18,32,0.045);
+
+    --font-display: 'Clash Display', 'General Sans', 'Satoshi', sans-serif;
     --font-body: 'Inter', sans-serif;
+    --font-numeric: 'Space Grotesk', 'Inter', sans-serif;
+
     --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
     --radius: 16px;
     --radius-sm: 10px;
-    --shadow: 0 8px 48px rgba(0,0,0,0.45);
-    --shadow-card: 0 4px 32px rgba(0,0,0,0.3);
+    --radius-btn: 12px;
+    --shadow: 0 20px 50px rgba(11,18,32,0.10);
+    --shadow-card: 0 10px 30px rgba(0,0,0,0.05);
+    --shadow-card-hover: 0 18px 40px rgba(11,18,32,0.09);
   }
 
   *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -55,76 +67,86 @@
     line-height: 1.6;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
+  /* ─── ICONS ─── */
+  .icon {
+    width: 20px; height: 20px;
+    stroke: currentColor; fill: none;
+    stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+    display: inline-block; flex-shrink: 0; vertical-align: -4px;
+  }
+  .icon-lg { width: 32px; height: 32px; stroke-width: 1.4; vertical-align: middle; }
+  .icon-xl { width: 44px; height: 44px; stroke-width: 1.3; vertical-align: middle; }
 
   /* ─── SCROLLBAR ─── */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--navy); }
-  ::-webkit-scrollbar-thumb { background: var(--navy-surface); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 3px; }
 
   /* ─── NAV ─── */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
     display: flex; align-items: center; justify-content: space-between;
-    padding: 0 5%; height: 68px;
-    background: rgba(255,255,255,0.88);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
+    padding: 0 5%; height: 76px;
+    background: rgba(250,250,248,0.92);
+    border-bottom: 1px solid transparent;
     transition: var(--transition);
   }
-  nav.scrolled { background: rgba(255,255,255,0.97); }
+  nav.scrolled { background: rgba(250,250,248,0.98); border-bottom-color: var(--border); }
 
   .nav-logo {
     font-family: var(--font-display);
-    font-size: 1.5rem; font-weight: 800;
-    letter-spacing: 0.05em;
-    background: linear-gradient(135deg, var(--gold), var(--gold-light));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    font-size: 1.4rem; font-weight: 700;
+    letter-spacing: 0.01em;
+    color: var(--white);
     cursor: pointer; text-decoration: none;
   }
 
   .nav-links {
-    display: flex; align-items: center; gap: 2rem;
+    display: flex; align-items: center; gap: 2.25rem;
     list-style: none;
   }
   .nav-links a {
     color: var(--white-dim); font-size: 0.875rem; font-weight: 500;
-    text-decoration: none; letter-spacing: 0.02em;
+    text-decoration: none; letter-spacing: 0.01em;
     transition: var(--transition); cursor: pointer;
   }
   .nav-links a:hover, .nav-links a.active { color: var(--white); }
 
   .nav-cta {
-    background: linear-gradient(135deg, var(--gold), var(--gold-bright));
-    color: var(--navy-fixed) !important;
-    padding: 0.5rem 1.25rem; border-radius: 8px;
-    font-weight: 700 !important; font-size: 0.82rem !important;
+    background: transparent !important;
+    color: var(--white) !important;
+    border: 1px solid var(--border-mid);
+    padding: 0.5rem 1.2rem !important; border-radius: 100px;
+    font-weight: 600 !important; font-size: 0.82rem !important;
     transition: var(--transition) !important;
-    -webkit-text-fill-color: var(--navy-fixed) !important;
   }
-  .nav-cta:hover { opacity: 0.9; transform: translateY(-1px); }
+  .nav-cta:hover { border-color: var(--white); background: rgba(11,18,32,0.03) !important; transform: none; }
 
   .nav-hamburger {
     display: none; flex-direction: column; gap: 5px;
     cursor: pointer; padding: 4px;
   }
   .nav-hamburger span {
-    width: 24px; height: 2px;
+    width: 22px; height: 1.5px;
     background: var(--white-dim); border-radius: 2px;
     transition: var(--transition);
   }
 
   .mobile-menu {
-    display: none; position: fixed; top: 68px; left: 0; right: 0;
-    background: rgba(255,255,255,0.98); backdrop-filter: blur(20px);
+    display: none; position: fixed; top: 76px; left: 0; right: 0;
+    background: rgba(250,250,248,0.99);
     padding: 1.5rem 5%; flex-direction: column; gap: 1.2rem;
     border-bottom: 1px solid var(--border); z-index: 999;
+    box-shadow: var(--shadow-card);
   }
   .mobile-menu.open { display: flex; }
   .mobile-menu a {
     color: var(--white-dim); text-decoration: none;
     font-size: 1rem; font-weight: 500; cursor: pointer;
-    padding: 0.5rem 0; border-bottom: 1px solid var(--border);
+    padding: 0.6rem 0; border-bottom: 1px solid var(--border);
     transition: var(--transition);
   }
   .mobile-menu a:hover { color: var(--white); }
@@ -132,161 +154,151 @@
   /* ─── PAGE SYSTEM ─── */
   .page { display: none; }
   .page.active { display: block; }
-  main { padding-top: 68px; min-height: 100vh; }
+  main { padding-top: 76px; min-height: 100vh; }
 
   /* ─── HERO ─── */
   .hero {
-    min-height: calc(100vh - 68px);
+    min-height: calc(100vh - 76px);
     display: flex; flex-direction: column; justify-content: center;
     position: relative; overflow: hidden;
-    padding: 5rem 5% 4rem;
+    padding: 6rem 5% 4rem;
   }
 
   .hero-bg {
     position: absolute; inset: 0; z-index: 0;
-    background:
-      radial-gradient(ellipse 70% 60% at 50% 10%, rgba(30,86,200,0.18) 0%, transparent 70%),
-      radial-gradient(ellipse 40% 40% at 85% 50%, rgba(201,168,76,0.1) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 50% at 15% 80%, rgba(26,173,110,0.07) 0%, transparent 60%);
+    background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(11,18,32,0.035) 0%, transparent 70%);
   }
 
   .hero-grid {
     position: absolute; inset: 0; z-index: 0;
     background-image:
-      linear-gradient(rgba(13,18,30,0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(13,18,30,0.025) 1px, transparent 1px);
-    background-size: 60px 60px;
+      linear-gradient(rgba(11,18,32,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(11,18,32,0.02) 1px, transparent 1px);
+    background-size: 64px 64px;
     mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, black 30%, transparent 80%);
   }
 
   .hero-content { position: relative; z-index: 1; max-width: 800px; }
+  .hero-dashboard { max-width: 1280px; margin-top: 4rem; }
 
   .hero-eyebrow {
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.3);
-    color: var(--gold-bright); font-size: 0.75rem; font-weight: 700;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    padding: 0.35rem 0.85rem; border-radius: 100px;
-    margin-bottom: 1.75rem;
+    display: inline-flex; align-items: center; gap: 0.55rem;
+    background: var(--card-bg); border: 1px solid var(--border);
+    color: var(--gold-bright); font-size: 0.75rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.4rem 0.9rem; border-radius: 100px;
+    margin-bottom: 2rem;
     animation: fadeUp 0.6s ease both;
   }
   .hero-eyebrow::before {
     content: ''; width: 6px; height: 6px; border-radius: 50%;
-    background: var(--gold-bright);
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%,100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.8); }
+    background: var(--gold);
   }
 
   h1.hero-title {
     font-family: var(--font-display);
-    font-size: clamp(2.8rem, 6vw, 5rem);
-    font-weight: 800; line-height: 1.1; letter-spacing: -0.02em;
-    margin-bottom: 1.5rem;
-    animation: fadeUp 0.6s 0.15s ease both;
+    font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+    font-weight: 700; line-height: 1.08; letter-spacing: -0.03em;
+    margin-bottom: 1.75rem; color: var(--white);
+    animation: fadeUp 0.6s 0.1s ease both;
   }
   .hero-title .gold { color: var(--gold-bright); }
   .hero-title .line2 { display: block; color: var(--white-dim); }
 
   .hero-sub {
-    font-size: 1.1rem; color: var(--white-dim);
-    max-width: 580px; line-height: 1.75;
-    margin-bottom: 2.5rem;
-    animation: fadeUp 0.6s 0.25s ease both;
+    font-size: 1.125rem; color: var(--white-dim);
+    max-width: 580px; line-height: 1.7;
+    margin-bottom: 2.75rem;
+    animation: fadeUp 0.6s 0.18s ease both;
   }
 
   .hero-actions {
     display: flex; flex-wrap: wrap; gap: 1rem;
-    animation: fadeUp 0.6s 0.35s ease both;
+    animation: fadeUp 0.6s 0.26s ease both;
   }
 
   .btn-primary {
     display: inline-flex; align-items: center; gap: 0.5rem;
-    background: linear-gradient(135deg, var(--gold), var(--gold-bright));
-    color: var(--navy-fixed); font-weight: 700; font-size: 0.9rem;
-    padding: 0.85rem 1.8rem; border-radius: 10px;
+    background: var(--blue);
+    color: var(--white-fixed); font-weight: 600; font-size: 0.9rem;
+    padding: 0.9rem 1.85rem; border-radius: var(--radius-btn);
     text-decoration: none; border: none; cursor: pointer;
     transition: var(--transition); letter-spacing: 0.01em;
   }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,168,76,0.4); }
+  .btn-primary:hover { background: var(--blue-bright); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(11,18,32,0.18); }
+  .btn-primary:active { transform: translateY(0); }
 
   .btn-secondary {
     display: inline-flex; align-items: center; gap: 0.5rem;
-    background: transparent;
-    border: 1px solid var(--border-mid);
-    color: var(--white-dim); font-weight: 600; font-size: 0.9rem;
-    padding: 0.85rem 1.8rem; border-radius: 10px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--white); font-weight: 500; font-size: 0.9rem;
+    padding: 0.9rem 1.85rem; border-radius: var(--radius-btn);
     text-decoration: none; cursor: pointer;
     transition: var(--transition);
   }
-  .btn-secondary:hover { border-color: var(--white-dim); color: var(--white); background: rgba(13,18,30,0.05); }
+  .btn-secondary:hover { border-color: var(--border-mid); transform: translateY(-2px); box-shadow: var(--shadow-card); }
 
   /* dashboard mockup */
-  .hero-dashboard {
-    position: relative; z-index: 1;
-    margin-top: 4rem;
-    animation: fadeUp 0.8s 0.5s ease both;
-  }
   .dashboard-card {
     background: var(--card-bg);
-    border: 1px solid var(--border-mid);
+    border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 1.5rem 2rem;
-    backdrop-filter: blur(20px);
-    box-shadow: var(--shadow);
-    max-width: 900px;
+    padding: 2rem 2.25rem;
+    box-shadow: var(--shadow-card);
+    max-width: 920px;
+    animation: fadeUp 0.7s 0.32s ease both;
   }
   .dash-row {
     display: grid; grid-template-columns: repeat(4,1fr); gap: 1.5rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.75rem;
   }
   .dash-stat {
     text-align: center;
   }
   .dash-stat .val {
-    font-size: 1.6rem; font-weight: 800;
-    font-family: var(--font-display);
+    font-size: 1.7rem; font-weight: 600;
+    font-family: var(--font-numeric);
     color: var(--gold-bright);
-    display: block;
+    display: block; letter-spacing: -0.01em;
   }
   .dash-stat .lbl {
     font-size: 0.72rem; color: var(--white-muted);
-    text-transform: uppercase; letter-spacing: 0.08em;
+    text-transform: uppercase; letter-spacing: 0.07em;
   }
   .dash-chart {
     height: 120px; position: relative;
-    border-top: 1px solid var(--border); padding-top: 1rem;
+    border-top: 1px solid var(--border); padding-top: 1.25rem;
   }
   .dash-chart canvas { width: 100% !important; }
   .chart-labels {
     display: flex; justify-content: space-between;
     font-size: 0.7rem; color: var(--white-muted);
-    margin-top: 0.5rem;
+    margin-top: 0.6rem;
   }
 
   /* ─── SECTIONS ─── */
-  section { padding: 5rem 5%; }
+  section { padding: 120px 5%; }
   .section-label {
-    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
     text-transform: uppercase; color: var(--gold-bright);
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.85rem;
   }
   .section-title {
     font-family: var(--font-display);
-    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-    font-weight: 700; line-height: 1.2; letter-spacing: -0.01em;
-    margin-bottom: 1rem;
+    font-size: clamp(1.75rem, 3.5vw, 3rem);
+    font-weight: 700; line-height: 1.18; letter-spacing: -0.015em;
+    margin-bottom: 1.1rem; color: var(--white);
+    max-width: 1280px; margin-left: auto; margin-right: auto;
   }
   .section-sub {
-    font-size: 1rem; color: var(--white-dim);
-    max-width: 560px; line-height: 1.75;
+    font-size: 1.125rem; color: var(--white-dim);
+    max-width: 560px; line-height: 1.7;
   }
-  .section-header { margin-bottom: 3.5rem; }
+  .section-header { margin-bottom: 3.75rem; max-width: 1280px; margin-left: auto; margin-right: auto; }
   .section-header.center { text-align: center; }
   .section-header.center .section-sub { margin: 0 auto; }
+  .page-header > * { max-width: 1280px; margin-left: auto; margin-right: auto; }
   .divider {
     height: 1px; background: var(--border);
     margin: 0 5%;
@@ -296,7 +308,8 @@
   .card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
-    gap: 1.5rem;
+    gap: 2rem;
+    max-width: 1280px; margin-left: auto; margin-right: auto;
   }
   .card-grid-3 { grid-template-columns: repeat(3,1fr); }
   .card-grid-2 { grid-template-columns: repeat(2,1fr); }
@@ -305,110 +318,110 @@
     background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 1.75rem;
+    padding: 2rem;
+    box-shadow: var(--shadow-card);
     transition: var(--transition);
     cursor: default;
   }
   .card:hover {
-    background: var(--card-bg-hover);
     border-color: var(--border-mid);
     transform: translateY(-4px);
-    box-shadow: var(--shadow-card);
+    box-shadow: var(--shadow-card-hover);
   }
   .card-icon {
-    width: 48px; height: 48px; border-radius: 12px;
+    width: 46px; height: 46px; border-radius: 11px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.4rem; margin-bottom: 1.1rem;
+    margin-bottom: 1.4rem;
+    background: var(--icon-chip);
+    color: var(--white);
   }
-  .card-icon.blue { background: rgba(30,86,200,0.18); }
-  .card-icon.gold { background: rgba(201,168,76,0.18); }
-  .card-icon.green { background: rgba(26,173,110,0.18); }
-  .card-icon.purple { background: rgba(130,90,210,0.18); }
+  .card-icon.blue, .card-icon.gold, .card-icon.green, .card-icon.purple { background: var(--icon-chip); color: var(--white); }
+  .card-icon .icon { width: 22px; height: 22px; }
 
   .card h3 {
-    font-size: 1.05rem; font-weight: 700;
-    margin-bottom: 0.5rem; letter-spacing: -0.01em;
+    font-family: var(--font-display);
+    font-size: 1.375rem; font-weight: 600;
+    margin-bottom: 0.65rem; letter-spacing: -0.01em; line-height: 1.3;
+    color: var(--white);
   }
-  .card p { font-size: 0.875rem; color: var(--white-dim); line-height: 1.65; }
+  .card p { font-size: 1rem; color: var(--white-dim); line-height: 1.65; }
 
   /* ─── STATS BAND ─── */
   .stats-band {
     background: var(--navy-surface);
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
-    padding: 3rem 5%;
+    padding: 4rem 5%;
     display: grid; grid-template-columns: repeat(4,1fr);
     gap: 2rem; text-align: center;
+    max-width: 1280px; margin-left: auto; margin-right: auto;
   }
   .stat-item .num {
-    font-family: var(--font-display);
-    font-size: 2.4rem; font-weight: 800;
+    font-family: var(--font-numeric);
+    font-size: 2.25rem; font-weight: 600;
     color: var(--gold-bright); display: block; line-height: 1;
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.5rem; letter-spacing: -0.01em;
   }
   .stat-item .desc {
     font-size: 0.8rem; color: var(--white-muted);
-    text-transform: uppercase; letter-spacing: 0.08em;
+    text-transform: uppercase; letter-spacing: 0.07em;
   }
 
   /* ─── FEATURES LIST ─── */
   .feature-row {
     display: grid; grid-template-columns: 1fr 1fr;
-    gap: 4rem; align-items: center;
-    padding: 4rem 5%;
+    gap: 5rem; align-items: center;
+    padding: 5.5rem 5%;
+    max-width: 1280px; margin-left: auto; margin-right: auto;
   }
   .feature-row.reverse { direction: rtl; }
   .feature-row.reverse > * { direction: ltr; }
 
   .feature-visual {
     background: var(--card-bg);
-    border: 1px solid var(--border-mid);
+    border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 2.5rem;
     box-shadow: var(--shadow-card);
     position: relative; overflow: hidden;
   }
-  .feature-visual::before {
-    content: '';
-    position: absolute; top: -40px; right: -40px;
-    width: 160px; height: 160px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(30,86,200,0.15), transparent);
-  }
+  .feature-visual::before { content: none; }
 
   .feature-tag {
     display: inline-block;
-    background: rgba(201,168,76,0.12);
-    border: 1px solid rgba(201,168,76,0.25);
-    color: var(--gold); font-size: 0.7rem; font-weight: 700;
+    background: transparent;
+    border: none;
+    color: var(--gold-bright); font-size: 0.75rem; font-weight: 600;
     letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 0.25rem 0.65rem; border-radius: 6px;
-    margin-bottom: 1rem;
+    padding: 0; border-radius: 0;
+    margin-bottom: 1.1rem;
   }
   .feature-h {
     font-family: var(--font-display);
-    font-size: 1.6rem; font-weight: 700; line-height: 1.25;
-    margin-bottom: 1rem;
+    font-size: clamp(1.5rem, 2.4vw, 1.85rem); font-weight: 700; line-height: 1.25;
+    margin-bottom: 1.1rem; color: var(--white); letter-spacing: -0.01em;
   }
   .feature-p {
-    color: var(--white-dim); font-size: 0.92rem; line-height: 1.75;
-    margin-bottom: 1.5rem;
+    color: var(--white-dim); font-size: 1.125rem; line-height: 1.75;
+    margin-bottom: 1.6rem;
   }
   .feature-list {
-    list-style: none; display: flex; flex-direction: column; gap: 0.6rem;
+    list-style: none; display: flex; flex-direction: column; gap: 0.75rem;
   }
   .feature-list li {
-    display: flex; align-items: flex-start; gap: 0.65rem;
-    font-size: 0.875rem; color: var(--white-dim);
+    display: flex; align-items: flex-start; gap: 0.7rem;
+    font-size: 0.95rem; color: var(--white-dim);
   }
   .feature-list li::before {
-    content: '✓'; color: var(--green-bright); font-weight: 800;
-    flex-shrink: 0; margin-top: 2px;
+    content: '✓'; color: var(--green-bright); font-weight: 700;
+    flex-shrink: 0; margin-top: 1px;
   }
 
   /* ─── ECOSYSTEM ─── */
   .ecosystem-container {
     display: flex; flex-direction: column; align-items: center;
-    gap: 0; padding: 3rem 5%;
+    gap: 0; padding: 3rem 5% 0;
+    max-width: 700px; margin: 0 auto;
   }
   .eco-node {
     display: flex; flex-direction: column; align-items: center;
@@ -419,116 +432,120 @@
     background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 1.25rem 2rem; width: 100%;
+    padding: 1.4rem 2rem; width: 100%;
     transition: var(--transition);
   }
   .eco-item:hover {
-    background: var(--card-bg-hover);
     border-color: var(--border-mid);
+    box-shadow: var(--shadow-card);
     transform: translateX(6px);
   }
   .eco-icon {
     width: 42px; height: 42px; flex-shrink: 0;
     border-radius: 10px; display: flex; align-items: center;
-    justify-content: center; font-size: 1.3rem;
-    background: rgba(30,86,200,0.18);
+    justify-content: center;
+    background: var(--icon-chip); color: var(--white);
   }
+  .eco-icon .icon { width: 20px; height: 20px; }
   .eco-connector {
-    width: 2px; height: 36px;
-    background: linear-gradient(180deg, var(--blue-bright), var(--blue));
+    width: 1px; height: 32px;
+    background: var(--border-mid);
     margin: 0 auto; position: relative;
   }
   .eco-connector::after {
     content: ''; position: absolute;
-    bottom: -5px; left: 50%; transform: translateX(-50%);
-    width: 0; height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 6px solid var(--blue);
+    bottom: -4px; left: 50%; transform: translateX(-50%);
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--border-mid);
   }
-  .eco-text h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.2rem; }
-  .eco-text p { font-size: 0.78rem; color: var(--white-muted); }
+  .eco-text h4 { font-size: 0.98rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--white); }
+  .eco-text p { font-size: 0.85rem; color: var(--white-muted); }
 
   /* ─── COMPARISON TABLE ─── */
   .compare-table {
     width: 100%; border-collapse: collapse;
-    background: var(--card-bg); border-radius: var(--radius);
-    overflow: hidden; font-size: 0.88rem;
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    overflow: hidden; font-size: 0.9rem;
+    max-width: 1280px; margin-left: auto; margin-right: auto;
   }
   .compare-table thead th {
-    padding: 1rem 1.5rem; text-align: left;
+    padding: 1.1rem 1.5rem; text-align: left;
     background: var(--navy-surface);
     border-bottom: 1px solid var(--border);
-    font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em;
+    font-weight: 600; font-size: 0.78rem; letter-spacing: 0.06em;
     text-transform: uppercase; color: var(--white-muted);
   }
-  .compare-table thead th:first-child { width: 40%; }
+  .compare-table thead th:first-child { width: 34%; }
   .compare-table thead th.highlight-col {
-    color: var(--gold-bright); background: rgba(201,168,76,0.08);
+    color: var(--gold-bright); background: rgba(200,169,106,0.09);
   }
   .compare-table tbody tr {
     border-bottom: 1px solid var(--border);
     transition: var(--transition);
   }
   .compare-table tbody tr:last-child { border-bottom: none; }
-  .compare-table tbody tr:hover { background: rgba(13,18,30,0.02); }
-  .compare-table td { padding: 0.9rem 1.5rem; color: var(--white-dim); }
+  .compare-table tbody tr:hover { background: rgba(11,18,32,0.015); }
+  .compare-table td { padding: 1rem 1.5rem; color: var(--white-dim); }
   .compare-table td:first-child { color: var(--white); font-weight: 500; }
-  .compare-table td.highlight-col { color: var(--gold-bright); font-weight: 600; }
-  .check { color: var(--green-bright); font-weight: 800; }
-  .cross { color: #ff5c5c; }
+  .compare-table td.highlight-col { color: var(--gold-bright); font-weight: 600; background: rgba(200,169,106,0.04); }
+  .check { color: var(--green-bright); font-weight: 700; }
+  .cross { color: var(--white-muted); }
 
   /* ─── TIMELINE ─── */
-  .timeline { position: relative; padding: 0 5% 0 calc(5% + 2rem); }
+  .timeline { position: relative; padding: 0 5% 0 calc(5% + 2rem); max-width: 1280px; margin-left: auto; margin-right: auto; }
   .timeline::before {
     content: '';
-    position: absolute; left: calc(5% + 0.875rem); top: 0; bottom: 0;
-    width: 2px; background: linear-gradient(180deg, var(--blue), var(--gold), var(--green));
+    position: absolute; left: calc(5% + 0.875rem); top: 6px; bottom: 6px;
+    width: 1px; background: var(--border-mid);
   }
   .tl-item {
-    position: relative; margin-bottom: 2.5rem;
+    position: relative; margin-bottom: 2.75rem;
   }
+  .tl-item:last-child { margin-bottom: 0; }
   .tl-dot {
     position: absolute; left: -2.6rem; top: 0.3rem;
-    width: 18px; height: 18px; border-radius: 50%;
-    background: var(--gold); border: 3px solid var(--navy);
-    box-shadow: 0 0 0 3px rgba(201,168,76,0.3);
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--card-bg); border: 2.5px solid var(--gold);
   }
-  .tl-item h4 { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
-  .tl-item p { font-size: 0.875rem; color: var(--white-dim); }
+  .tl-item h4 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--white); }
+  .tl-item p { font-size: 1rem; color: var(--white-dim); line-height: 1.65; }
 
   /* ─── PROBLEM ─── */
   .problem-grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
-    gap: 1.5rem;
+    gap: 2rem;
+    max-width: 1280px; margin-left: auto; margin-right: auto;
   }
   .problem-card {
-    background: rgba(255,60,60,0.05);
-    border: 1px solid rgba(255,60,60,0.15);
-    border-radius: var(--radius); padding: 1.5rem;
+    background: rgba(163,52,42,0.03);
+    border: 1px solid rgba(163,52,42,0.13);
+    border-radius: var(--radius); padding: 1.9rem;
+    box-shadow: var(--shadow-card);
   }
-  .problem-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
-  .problem-card p { font-size: 0.85rem; color: var(--white-dim); line-height: 1.6; }
+  .problem-card h4 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.55rem; color: var(--white); }
+  .problem-card p { font-size: 0.95rem; color: var(--white-dim); line-height: 1.6; }
   .problem-num {
-    font-family: var(--font-display); font-size: 2rem;
-    font-weight: 800; color: rgba(255,90,90,0.3);
-    line-height: 1; margin-bottom: 0.75rem;
+    font-family: var(--font-numeric); font-size: 1.9rem;
+    font-weight: 600; color: rgba(163,52,42,0.38);
+    line-height: 1; margin-bottom: 0.9rem;
   }
 
   .solution-card {
-    background: rgba(26,173,110,0.05);
-    border: 1px solid rgba(26,173,110,0.15);
-    border-radius: var(--radius); padding: 1.5rem;
+    background: rgba(14,165,107,0.03);
+    border: 1px solid rgba(14,165,107,0.13);
+    border-radius: var(--radius); padding: 1.9rem;
+    box-shadow: var(--shadow-card);
     transition: var(--transition);
   }
-  .solution-card:hover { transform: translateY(-4px); }
+  .solution-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-card-hover); border-color: rgba(14,165,107,0.25); }
   .solution-num {
-    font-family: var(--font-display); font-size: 2rem;
-    font-weight: 800; color: rgba(26,173,110,0.35);
-    line-height: 1; margin-bottom: 0.75rem;
+    font-family: var(--font-numeric); font-size: 1.9rem;
+    font-weight: 600; color: rgba(14,165,107,0.55);
+    line-height: 1; margin-bottom: 0.9rem;
   }
-  .solution-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
-  .solution-card p { font-size: 0.85rem; color: var(--white-dim); line-height: 1.6; }
+  .solution-card h4 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.55rem; color: var(--white); }
+  .solution-card p { font-size: 0.95rem; color: var(--white-dim); line-height: 1.6; }
 
   /* ─── FAQ ─── */
   .faq-list { max-width: 780px; margin: 0 auto; }
@@ -538,50 +555,55 @@
   }
   .faq-q {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 1.25rem 0; gap: 1rem;
-    font-weight: 600; font-size: 0.95rem;
+    padding: 1.4rem 0; gap: 1rem;
+    font-weight: 500; font-size: 1rem; color: var(--white);
     transition: var(--transition);
   }
   .faq-q:hover { color: var(--gold-bright); }
   .faq-arrow {
     flex-shrink: 0; width: 22px; height: 22px;
-    border-radius: 50%; background: var(--navy-surface);
+    border-radius: 50%; background: transparent; border: 1px solid var(--border-mid);
     display: flex; align-items: center; justify-content: center;
-    font-size: 0.75rem; transition: var(--transition);
+    transition: var(--transition); color: var(--white-dim);
   }
-  .faq-item.open .faq-arrow { transform: rotate(180deg); background: var(--gold); color: var(--navy-fixed); }
+  .faq-arrow .icon { width: 13px; height: 13px; stroke-width: 2; transition: transform 0.3s ease; }
+  .faq-item.open .faq-arrow { background: var(--blue); border-color: var(--blue); color: var(--white-fixed); }
+  .faq-item.open .faq-arrow .icon { transform: rotate(180deg); }
   .faq-a {
     max-height: 0; overflow: hidden;
     transition: max-height 0.35s ease, padding 0.35s ease;
-    font-size: 0.875rem; color: var(--white-dim); line-height: 1.75;
+    font-size: 1rem; color: var(--white-dim); line-height: 1.75;
   }
-  .faq-item.open .faq-a { max-height: 300px; padding-bottom: 1.25rem; }
+  .faq-item.open .faq-a { max-height: 300px; padding-bottom: 1.4rem; }
 
   /* ─── CONTACT ─── */
   .contact-grid {
     display: grid; grid-template-columns: 1fr 1.4fr; gap: 4rem; align-items: start;
+    max-width: 1280px; margin-left: auto; margin-right: auto;
   }
   .contact-info-card {
     background: var(--card-bg); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 2rem;
+    border-radius: var(--radius); padding: 2.25rem;
+    box-shadow: var(--shadow-card);
   }
   .contact-info-item {
     display: flex; align-items: flex-start; gap: 1rem;
-    padding: 1.1rem 0; border-bottom: 1px solid var(--border);
+    padding: 1.15rem 0; border-bottom: 1px solid var(--border);
   }
   .contact-info-item:last-child { border-bottom: none; }
   .ci-icon {
     width: 38px; height: 38px; border-radius: 9px;
-    background: rgba(30,86,200,0.18); flex-shrink: 0;
+    background: var(--icon-chip); flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.1rem;
+    font-size: 1rem; color: var(--white); font-family: var(--font-display); font-weight: 600;
   }
+  .ci-icon .icon { width: 18px; height: 18px; }
   .ci-text .label {
-    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
-    color: var(--white-muted); margin-bottom: 0.15rem;
+    font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.09em;
+    color: var(--white-muted); margin-bottom: 0.2rem;
   }
   .ci-text a, .ci-text span {
-    font-size: 0.88rem; color: var(--white-dim);
+    font-size: 0.92rem; color: var(--white-dim);
     text-decoration: none; transition: var(--transition);
   }
   .ci-text a:hover { color: var(--gold-bright); }
@@ -591,232 +613,248 @@
   }
   .social-btn {
     display: flex; align-items: center; gap: 0.5rem;
-    background: var(--navy-surface); border: 1px solid var(--border);
-    color: var(--white-dim); font-size: 0.78rem; font-weight: 600;
-    padding: 0.5rem 1rem; border-radius: 8px;
+    background: var(--card-bg); border: 1px solid var(--border);
+    color: var(--white-dim); font-size: 0.8rem; font-weight: 500;
+    padding: 0.55rem 1.05rem; border-radius: 8px;
     text-decoration: none; transition: var(--transition);
   }
-  .social-btn:hover { border-color: var(--border-mid); color: var(--white); }
+  .social-btn:hover { border-color: var(--border-mid); color: var(--white); box-shadow: var(--shadow-card); }
+  .social-btn .icon { width: 16px; height: 16px; }
 
   /* ─── FORM ─── */
   .form-card {
     background: var(--card-bg); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 2.5rem;
+    border-radius: var(--radius); padding: 2.75rem;
+    box-shadow: var(--shadow-card);
   }
-  .form-group { margin-bottom: 1.25rem; }
+  .form-group { margin-bottom: 1.35rem; }
   .form-group label {
-    display: block; font-size: 0.8rem; font-weight: 600;
-    color: var(--white-dim); margin-bottom: 0.5rem;
+    display: block; font-size: 0.78rem; font-weight: 600;
+    color: var(--white-dim); margin-bottom: 0.55rem;
     text-transform: uppercase; letter-spacing: 0.07em;
   }
   .form-group input,
   .form-group select,
   .form-group textarea {
-    width: 100%; background: rgba(13,18,30,0.04);
+    width: 100%; background: var(--navy-surface);
     border: 1px solid var(--border);
-    border-radius: 10px; padding: 0.8rem 1rem;
-    color: var(--white); font-family: var(--font-body); font-size: 0.9rem;
+    border-radius: 10px; padding: 0.85rem 1.05rem;
+    color: var(--white); font-family: var(--font-body); font-size: 0.95rem;
     transition: var(--transition); outline: none;
     resize: vertical;
   }
   .form-group input:focus,
   .form-group select:focus,
   .form-group textarea:focus {
-    border-color: var(--blue-bright); background: rgba(30,86,200,0.07);
+    border-color: var(--blue); background: var(--card-bg); box-shadow: 0 0 0 3px rgba(11,18,32,0.06);
   }
-  .form-group select option { background: var(--navy-mid); }
+  .form-group select option { background: var(--card-bg); }
   .form-group textarea { min-height: 130px; }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
   #formSuccess {
     display: none; padding: 1rem 1.25rem;
-    background: rgba(26,173,110,0.12); border: 1px solid rgba(26,173,110,0.3);
+    background: rgba(14,165,107,0.08); border: 1px solid rgba(14,165,107,0.25);
     border-radius: 10px; color: var(--green-bright); font-weight: 600;
-    font-size: 0.9rem; margin-top: 1rem; text-align: center;
+    font-size: 0.92rem; margin-top: 1rem; text-align: center;
   }
 
   /* ─── FOUNDER ─── */
   .founder-section {
     display: grid; grid-template-columns: 1fr 1.8fr;
-    gap: 4rem; align-items: center;
-    padding: 5rem 5%;
+    gap: 4.5rem; align-items: center;
+    padding: 6rem 5%;
+    max-width: 1280px; margin-left: auto; margin-right: auto;
   }
   .founder-avatar {
-    width: 220px; height: 220px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--navy-surface), var(--blue));
-    border: 4px solid var(--gold);
+    width: 200px; height: 200px; border-radius: 50%;
+    background: var(--navy-surface);
+    border: 1.5px solid var(--gold);
     display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-display); font-size: 5rem; font-weight: 800;
+    font-family: var(--font-display); font-size: 4rem; font-weight: 600;
     color: var(--gold-bright); margin: 0 auto;
-    box-shadow: 0 0 60px rgba(201,168,76,0.2);
   }
   .founder-name {
     font-family: var(--font-display);
-    font-size: 2.5rem; font-weight: 800; margin-bottom: 0.25rem;
+    font-size: clamp(1.9rem, 3vw, 2.4rem); font-weight: 700; margin-bottom: 0.35rem;
+    color: var(--white); letter-spacing: -0.01em;
   }
   .founder-role {
-    color: var(--gold-bright); font-size: 0.9rem;
-    font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-    margin-bottom: 1.5rem;
+    color: var(--gold-bright); font-size: 0.85rem;
+    font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: 1.75rem;
   }
   .founder-quote {
-    font-size: 1.2rem; font-style: italic; color: var(--white-dim);
-    line-height: 1.7; margin-bottom: 1.5rem;
-    border-left: 3px solid var(--gold); padding-left: 1.25rem;
+    font-family: var(--font-display);
+    font-size: 1.3rem; font-style: normal; font-weight: 500; color: var(--white);
+    line-height: 1.55; margin-bottom: 1.75rem;
+    border-left: 2px solid var(--gold); padding-left: 1.4rem;
   }
   .founder-bio {
-    font-size: 0.92rem; color: var(--white-dim); line-height: 1.8;
+    font-size: 1.05rem; color: var(--white-dim); line-height: 1.8;
   }
 
   /* ─── VISION ─── */
   .vision-hero {
-    min-height: 70vh; display: flex; align-items: center;
+    min-height: 60vh; display: flex; align-items: center;
     position: relative; overflow: hidden;
-    padding: 6rem 5%;
-    background:
-      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(30,86,200,0.22) 0%, transparent 70%);
+    padding: 7rem 5%;
+    background: radial-gradient(ellipse 65% 55% at 50% 0%, rgba(11,18,32,0.035) 0%, transparent 70%);
   }
   .vision-pillar {
     background: var(--card-bg); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 2rem;
+    border-radius: var(--radius); padding: 2.25rem;
+    box-shadow: var(--shadow-card);
     text-align: center; transition: var(--transition);
   }
-  .vision-pillar:hover { transform: translateY(-6px); border-color: var(--border-mid); }
+  .vision-pillar:hover { transform: translateY(-4px); border-color: var(--border-mid); box-shadow: var(--shadow-card-hover); }
   .vision-pillar .vp-icon {
-    font-size: 2.5rem; margin-bottom: 1rem; display: block;
+    width: 46px; height: 46px; border-radius: 11px;
+    background: var(--icon-chip); color: var(--white);
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-bottom: 1.25rem;
   }
-  .vision-pillar h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
-  .vision-pillar p { font-size: 0.82rem; color: var(--white-dim); line-height: 1.65; }
+  .vision-pillar .vp-icon .icon { width: 22px; height: 22px; }
+  .vision-pillar h3 { font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; margin-bottom: 0.6rem; color: var(--white); }
+  .vision-pillar p { font-size: 0.92rem; color: var(--white-dim); line-height: 1.65; }
 
   .manifesto {
     background: var(--navy-surface);
     border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 3.5rem;
+    border-radius: var(--radius); padding: 4rem 3.5rem;
     text-align: center; max-width: 760px; margin: 0 auto;
   }
   .manifesto p {
-    font-family: var(--font-display); font-size: 1.35rem;
-    line-height: 1.8; color: var(--white-dim);
+    font-family: var(--font-display); font-size: 1.5rem; font-weight: 500;
+    line-height: 1.65; color: var(--white-dim); letter-spacing: -0.005em;
   }
-  .manifesto p strong { color: var(--white); }
+  .manifesto p strong { color: var(--white); font-weight: 600; }
   .manifesto p .gold { color: var(--gold-bright); }
 
   /* ─── FOOTER ─── */
   footer {
     background: var(--navy-mid);
     border-top: 1px solid var(--border);
-    padding: 4rem 5% 2rem;
+    padding: 5rem 5% 2.5rem;
   }
   .footer-grid {
     display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 3rem; margin-bottom: 3rem;
+    gap: 3rem; margin-bottom: 3.5rem;
+    max-width: 1280px; margin-left: auto; margin-right: auto;
   }
   .footer-brand p {
-    font-size: 0.85rem; color: var(--white-muted);
-    max-width: 280px; line-height: 1.7; margin-top: 0.75rem;
+    font-size: 0.9rem; color: var(--white-muted);
+    max-width: 280px; line-height: 1.7; margin-top: 0.85rem;
   }
   .footer-col h5 {
-    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.09em;
     text-transform: uppercase; color: var(--white-muted);
-    margin-bottom: 1rem;
+    margin-bottom: 1.1rem;
   }
   .footer-col a {
-    display: block; color: var(--white-dim); font-size: 0.85rem;
-    text-decoration: none; margin-bottom: 0.55rem;
+    display: block; color: var(--white-dim); font-size: 0.9rem;
+    text-decoration: none; margin-bottom: 0.65rem;
     cursor: pointer; transition: var(--transition);
   }
   .footer-col a:hover { color: var(--white); }
 
   .footer-bottom {
     display: flex; align-items: center; justify-content: space-between;
-    border-top: 1px solid var(--border); padding-top: 1.5rem;
-    font-size: 0.78rem; color: var(--white-muted);
+    border-top: 1px solid var(--border); padding-top: 1.75rem;
+    font-size: 0.8rem; color: var(--white-muted);
+    max-width: 1280px; margin-left: auto; margin-right: auto;
   }
-  .footer-socials { display: flex; gap: 1rem; }
+  .footer-socials { display: flex; gap: 0.75rem; }
   .footer-socials a {
     display: flex; align-items: center; justify-content: center;
     width: 34px; height: 34px; border-radius: 8px;
-    background: var(--navy-surface); border: 1px solid var(--border);
-    color: var(--white-dim); font-size: 1rem;
+    background: var(--card-bg); border: 1px solid var(--border);
+    color: var(--white-dim); font-size: 0.95rem;
     text-decoration: none; transition: var(--transition);
   }
   .footer-socials a:hover { border-color: var(--gold); color: var(--gold-bright); }
+  .footer-socials .icon { width: 16px; height: 16px; }
 
   /* ─── ANIMATIONS ─── */
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
+    from { opacity: 0; transform: translateY(16px); }
     to { opacity: 1; transform: translateY(0); }
   }
-  @keyframes float {
-    0%,100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-  }
-  .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
   .fade-in.visible { opacity: 1; transform: translateY(0); }
 
   /* ─── BADGE/TAG ─── */
-  .badge {
-    display: inline-block; padding: 0.25rem 0.65rem;
-    border-radius: 6px; font-size: 0.72rem; font-weight: 700;
+  .badge, .badge-blue, .badge-gold, .badge-green {
+    display: inline-block; padding: 0.3rem 0.75rem;
+    border-radius: 6px; font-size: 0.7rem; font-weight: 600;
     letter-spacing: 0.07em; text-transform: uppercase;
+    background: rgba(11,18,32,0.045); color: var(--white-dim);
+    border: 1px solid var(--border);
   }
-  .badge-blue { background: rgba(30,86,200,0.18); color: var(--blue-pale); }
-  .badge-gold { background: rgba(201,168,76,0.18); color: var(--gold-bright); }
-  .badge-green { background: rgba(26,173,110,0.18); color: var(--green-bright); }
 
   /* ─── WAITLIST BANNER ─── */
   .waitlist-banner {
-    background: linear-gradient(135deg, var(--blue), #0e3fa0);
-    border-radius: var(--radius); padding: 3rem;
+    background: var(--blue);
+    color: var(--white-fixed);
+    border-radius: var(--radius); padding: 3.5rem;
     text-align: center;
     position: relative; overflow: hidden;
+    max-width: 1000px; margin-left: auto; margin-right: auto;
   }
-  .waitlist-banner::before {
-    content: '';
-    position: absolute; top: -60px; right: -60px;
-    width: 200px; height: 200px; border-radius: 50%;
-    background: rgba(255,255,255,0.05);
+  .waitlist-banner .badge, .waitlist-banner .badge-blue,
+  .waitlist-banner .badge-gold, .waitlist-banner .badge-green {
+    background: rgba(255,255,255,0.12); color: var(--white-fixed);
+    border-color: rgba(255,255,255,0.22);
   }
+  .waitlist-banner .btn-primary { background: var(--gold); color: var(--navy-fixed); }
+  .waitlist-banner .btn-primary:hover { background: #B8935A; }
+  .waitlist-banner .btn-secondary {
+    background: rgba(255,255,255,0.08); color: var(--white-fixed);
+    border-color: rgba(255,255,255,0.28);
+  }
+  .waitlist-banner .btn-secondary:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.45); }
   .waitlist-banner h3 {
-    font-family: var(--font-display); font-size: 1.8rem;
-    font-weight: 800; margin-bottom: 0.75rem;
+    font-family: var(--font-display); font-size: 1.75rem;
+    font-weight: 700; margin-bottom: 0.85rem;
   }
   .waitlist-banner p {
-    color: rgba(255,255,255,0.75); margin-bottom: 1.75rem; font-size: 0.95rem;
+    color: rgba(250,250,248,0.7); margin-bottom: 2rem; font-size: 1rem; line-height: 1.6;
+    max-width: 460px; margin-left: auto; margin-right: auto;
   }
   .waitlist-form {
     display: flex; gap: 0.75rem; max-width: 460px;
     margin: 0 auto;
   }
   .waitlist-form input {
-    flex: 1; background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 10px; padding: 0.8rem 1.1rem;
-    color: var(--white-fixed); font-size: 0.9rem; outline: none;
+    flex: 1; background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: var(--radius-btn); padding: 0.85rem 1.1rem;
+    color: var(--white-fixed); font-size: 0.92rem; outline: none;
     font-family: var(--font-body);
     transition: var(--transition);
   }
-  .waitlist-form input:focus { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.4); }
-  .waitlist-form input::placeholder { color: rgba(255,255,255,0.45); }
+  .waitlist-form input:focus { background: rgba(255,255,255,0.13); border-color: rgba(255,255,255,0.32); }
+  .waitlist-form input::placeholder { color: rgba(255,255,255,0.4); }
 
   .page-header {
-    padding: 4rem 5% 2rem;
-    background: linear-gradient(180deg, rgba(30,86,200,0.07) 0%, transparent 100%);
+    padding: 6.5rem 5% 3rem;
+    background: var(--navy-mid);
     border-bottom: 1px solid var(--border);
   }
 
   /* pill tabs */
   .tabs {
-    display: flex; gap: 0.5rem; flex-wrap: wrap;
-    margin-bottom: 2rem;
+    display: flex; gap: 0.6rem; flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+    max-width: 1280px; margin-left: auto; margin-right: auto;
   }
   .tab-btn {
-    background: var(--navy-surface); border: 1px solid var(--border);
-    color: var(--white-dim); font-size: 0.82rem; font-weight: 600;
-    padding: 0.5rem 1.1rem; border-radius: 100px;
+    background: var(--card-bg); border: 1px solid var(--border);
+    color: var(--white-dim); font-size: 0.85rem; font-weight: 500;
+    padding: 0.55rem 1.2rem; border-radius: 100px;
     cursor: pointer; transition: var(--transition);
   }
   .tab-btn.active, .tab-btn:hover {
-    background: rgba(30,86,200,0.18); border-color: var(--blue-bright); color: var(--white);
+    background: var(--blue); border-color: var(--blue); color: var(--white-fixed);
   }
 
   /* mini chart in card */
@@ -829,19 +867,19 @@
   }
   .feedback-btn {
     display: inline-flex; align-items: center; gap: 0.55rem;
-    background: linear-gradient(135deg, var(--blue), var(--blue-bright));
+    background: var(--blue);
     color: var(--white-fixed); border: none; cursor: pointer;
     padding: 0.85rem 1.3rem; border-radius: 999px;
-    font-family: var(--font-body); font-weight: 700; font-size: 0.85rem;
+    font-family: var(--font-body); font-weight: 600; font-size: 0.85rem;
     box-shadow: var(--shadow); transition: var(--transition);
   }
-  .feedback-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(45,110,240,0.45); }
-  .feedback-btn-icon { font-size: 1rem; }
+  .feedback-btn:hover { transform: translateY(-2px); background: var(--blue-bright); box-shadow: 0 22px 44px rgba(11,18,32,0.16); }
+  .feedback-btn-icon { display: inline-flex; }
   .feedback-card {
     width: 300px; max-width: calc(100vw - 3rem);
-    background: var(--navy-light); border: 1px solid var(--border-mid);
+    background: var(--card-bg); border: 1px solid var(--border);
     border-radius: var(--radius); box-shadow: var(--shadow);
-    padding: 1.5rem; position: relative;
+    padding: 1.6rem; position: relative;
     opacity: 0; visibility: hidden; transform: translateY(12px) scale(0.97);
     pointer-events: none;
     transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s linear 0.25s;
@@ -851,30 +889,32 @@
     pointer-events: auto; transition: opacity 0.25s ease, transform 0.25s ease;
   }
   .feedback-close {
-    position: absolute; top: 0.75rem; right: 0.75rem;
+    position: absolute; top: 0.85rem; right: 0.85rem;
     background: none; border: none; color: var(--white-muted);
     font-size: 1.15rem; line-height: 1; cursor: pointer; padding: 0.25rem;
   }
   .feedback-close:hover { color: var(--white); }
-  .feedback-card .feedback-icon { font-size: 1.5rem; margin-bottom: 0.6rem; }
-  .feedback-card h4 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
-  .feedback-card p { font-size: 0.85rem; color: var(--white-dim); line-height: 1.55; margin-bottom: 1.1rem; }
+  .feedback-card .feedback-icon { width: 38px; height: 38px; border-radius: 10px; background: var(--icon-chip); display: flex; align-items: center; justify-content: center; margin-bottom: 0.85rem; color: var(--white); }
+  .feedback-card .feedback-icon .icon { width: 19px; height: 19px; }
+  .feedback-card h4 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--white); }
+  .feedback-card p { font-size: 0.88rem; color: var(--white-dim); line-height: 1.55; margin-bottom: 1.2rem; }
   .feedback-cta {
     display: flex; align-items: center; justify-content: center; gap: 0.4rem;
-    background: linear-gradient(135deg, var(--gold), var(--gold-bright));
-    color: var(--navy-fixed); font-weight: 700; font-size: 0.82rem;
-    padding: 0.7rem 1.1rem; border-radius: 8px;
+    background: var(--gold);
+    color: var(--navy-fixed); font-weight: 600; font-size: 0.85rem;
+    padding: 0.75rem 1.1rem; border-radius: var(--radius-btn);
     text-decoration: none; transition: var(--transition); width: 100%;
   }
-  .feedback-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(201,168,76,0.35); }
+  .feedback-cta:hover { background: #B8935A; transform: translateY(-1px); }
 
   /* ─── RESPONSIVE ─── */
   @media (max-width: 1024px) {
+    section { padding: 88px 5%; }
     .card-grid-3 { grid-template-columns: repeat(2,1fr); }
-    .feature-row { grid-template-columns: 1fr; gap: 2.5rem; }
+    .feature-row { grid-template-columns: 1fr; gap: 2.75rem; padding: 4rem 5%; }
     .feature-row.reverse { direction: ltr; }
-    .founder-section { grid-template-columns: 1fr; gap: 3rem; text-align: center; }
-    .founder-quote { border-left: none; border-top: 3px solid var(--gold); padding-left: 0; padding-top: 1rem; }
+    .founder-section { grid-template-columns: 1fr; gap: 3rem; text-align: center; padding: 4.5rem 5%; }
+    .founder-quote { border-left: none; border-top: 2px solid var(--gold); padding-left: 0; padding-top: 1.1rem; text-align: left; }
     .footer-grid { grid-template-columns: 1fr 1fr; }
     .contact-grid { grid-template-columns: 1fr; }
     .stats-band { grid-template-columns: repeat(2,1fr); }
@@ -883,25 +923,65 @@
   @media (max-width: 768px) {
     .nav-links { display: none; }
     .nav-hamburger { display: flex; }
-    .hero { padding: 3rem 5% 3rem; }
-    h1.hero-title { font-size: 2.2rem; }
-    .dash-row { grid-template-columns: repeat(2,1fr); }
+    .hero { padding: 3rem 5% 3rem; min-height: auto; }
+    h1.hero-title { font-size: 2.25rem; }
+    .dash-row { grid-template-columns: repeat(2,1fr); gap: 1.1rem; }
     .card-grid-3 { grid-template-columns: 1fr; }
     .card-grid-2 { grid-template-columns: 1fr; }
     .footer-grid { grid-template-columns: 1fr; }
     .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
-    .stats-band { grid-template-columns: repeat(2,1fr); }
+    .stats-band { grid-template-columns: repeat(2,1fr); padding: 3rem 5%; }
     .waitlist-form { flex-direction: column; }
-    section { padding: 3.5rem 5%; }
-    .manifesto { padding: 2rem; }
-    .manifesto p { font-size: 1.05rem; }
+    section { padding: 64px 5%; }
+    .manifesto { padding: 2.25rem 1.75rem; }
+    .manifesto p { font-size: 1.15rem; }
     .feedback-widget { right: 1.1rem; bottom: 1.1rem; }
     .feedback-btn-label { display: none; }
     .feedback-btn { padding: 0.85rem; border-radius: 50%; }
+    .compare-table { font-size: 0.82rem; }
+    .compare-table td, .compare-table th { padding: 0.8rem 1rem; }
   }
+
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<defs>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+<symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.4l2.8 2.8L16.2 9"/></symbol>
+<symbol id="i-trending-up" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-9"/><path d="M14.5 6H21v6.5"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="11" width="15" height="9.5" rx="2"/><path d="M8 11V7.3a4 4 0 0 1 8 0V11"/></symbol>
+<symbol id="i-graduation-cap" viewBox="0 0 24 24"><path d="M12 3.2L2.3 8l9.7 4.8L21.7 8z"/><path d="M6.3 10.6v4.5c0 1.6 2.6 3 5.7 3s5.7-1.4 5.7-3v-4.5"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.4 2.5 2.4 15.5 0 18"/><path d="M12 3c-2.4 2.5-2.4 15.5 0 18"/></symbol>
+<symbol id="i-arrow-up-right" viewBox="0 0 24 24"><path d="M7 17L17 7"/><path d="M8.5 7H17v8.5"/></symbol>
+<symbol id="i-bar-chart" viewBox="0 0 24 24"><line x1="5" y1="20" x2="5" y2="11.5"/><line x1="12" y1="20" x2="12" y2="5.5"/><line x1="19" y1="20" x2="19" y2="14.5"/><line x1="3" y1="20.5" x2="21" y2="20.5"/></symbol>
+<symbol id="i-message-circle" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 1 3.4 6.5L4 20l1.2-3.7A7.9 7.9 0 0 1 4 12z"/></symbol>
+<symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8.2h3.1l1.5-2.3a2 2 0 0 1 1.7-.9h3.4a2 2 0 0 1 1.7.9l1.5 2.3H20a2 2 0 0 1 2 2v8.6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V10.2a2 2 0 0 1 2-2z"/><circle cx="12" cy="13.6" r="3.4"/></symbol>
+<symbol id="i-landmark" viewBox="0 0 24 24"><path d="M3 9.5l9-6 9 6"/><path d="M4.5 9.5v9"/><path d="M9.5 9.5v9"/><path d="M14.5 9.5v9"/><path d="M19.5 9.5v9"/><path d="M2.3 21h19.4"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3.3l2.5 5.5 6 .6-4.5 4 1.3 5.9-5.3-3.2-5.3 3.2 1.3-5.9-4.5-4 6-.6z"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="i-x-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.2 9.2l5.6 5.6M14.8 9.2l-5.6 5.6"/></symbol>
+<symbol id="i-alert-triangle" viewBox="0 0 24 24"><path d="M12 3.6l9.3 16.1H2.7z"/><line x1="12" y1="9.6" x2="12" y2="13.8"/><circle cx="12" cy="16.9" r="0.9" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-key" viewBox="0 0 24 24"><circle cx="7.8" cy="8" r="4"/><path d="M10.6 10.8L20 20.2"/><path d="M15.4 15.6l2.3-2.3"/><path d="M17.7 17.9l2.3-2.3"/></symbol>
+<symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M11.5 2.5l1.7 5.8 5.8 1.7-5.8 1.7-1.7 5.8-1.7-5.8-5.8-1.7 5.8-1.7z"/><path d="M18.3 15.5l.7 2.1 2.1.7-2.1.7-.7 2.1-.7-2.1-2.1-.7 2.1-.7z"/></symbol>
+<symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.3 8.7l-2 5-5 2 2-5z"/></symbol>
+<symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V6.3a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2V8"/><line x1="3" y1="13.6" x2="21" y2="13.6"/></symbol>
+<symbol id="i-handshake" viewBox="0 0 24 24"><path d="M2.5 12.8l3.8-3.8 2.9 1.9 2.8-1.9 2.8 1.9 2.9-1.9 3.8 3.8"/><path d="M7.8 13.3l2 2.6 2-1.6 2 1.6 2-2.6"/></symbol>
+<symbol id="i-newspaper" viewBox="0 0 24 24"><path d="M4.3 4.2H17a1 1 0 0 1 1 1v13.6a2 2 0 0 1-2 2H6.3a2 2 0 0 1-2-2V4.2z"/><path d="M18 8h1.7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H18"/><line x1="7.3" y1="8.2" x2="13.7" y2="8.2"/><line x1="7.3" y1="11.6" x2="13.7" y2="11.6"/><line x1="7.3" y1="15" x2="11.2" y2="15"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8.2" r="3.3"/><path d="M2.8 19.8a6.2 6.2 0 0 1 12.4 0"/><path d="M15.8 8.6a3 3 0 1 1 0 5.8"/><path d="M16.6 14.5c2.5.5 4.4 2.6 4.6 5.3"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.2 20a7.8 7.8 0 0 1 15.6 0"/></symbol>
+<symbol id="i-lightbulb" viewBox="0 0 24 24"><path d="M9.3 18h5.4"/><path d="M10.1 21h3.8"/><path d="M12 3.2a6.3 6.3 0 0 0-3.9 11.3c.7.6 1.1 1.4 1.1 2.3h5.6c0-.9.4-1.7 1.1-2.3A6.3 6.3 0 0 0 12 3.2z"/></symbol>
+<symbol id="i-sprout" viewBox="0 0 24 24"><path d="M12 21v-8.8"/><path d="M12 12.2c0-3.9 2.9-6 6.8-6 0 3.9-2.9 6.8-6.8 6z"/><path d="M12 13c-.3-3.3-2.6-5.1-5.8-5.1-.2 3.3 2.2 5.7 5.8 5.1z"/></symbol>
+<symbol id="i-smartphone" viewBox="0 0 24 24"><rect x="6.5" y="2.2" width="11" height="19.6" rx="2.2"/><line x1="10.3" y1="18.2" x2="13.7" y2="18.2"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.2l8.5 6.6 8.5-6.6"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.6l6 3.4-6 3.4z" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="M6 9.5l6 6 6-6"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3.2l7 2.9v6.1c0 4.4-2.9 7.9-7 9-4.1-1.1-7-4.6-7-9V6.1z"/></symbol>
+<symbol id="i-wallet" viewBox="0 0 24 24"><rect x="3" y="6.3" width="18" height="13" rx="2"/><path d="M3 10h18"/><circle cx="16.6" cy="14.5" r="1.15" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-zap" viewBox="0 0 24 24"><path d="M13.2 2.6L5 13.8h6l-1 7.6 8.2-11.2h-6.1z"/></symbol>
+</defs>
+</svg>
 
 <!-- ═══════════════════════════════════
      NAVIGATION
@@ -919,7 +999,7 @@
     <li><a onclick="navigateTo('founder')">Founder</a></li>
     <li><a onclick="navigateTo('faq')">FAQ</a></li>
     <li><a onclick="navigateTo('contact')" class="nav-cta">Contact</a></li>
-    <li><a href="https://nivx-1016580972323.asia-southeast1.run.app" target="_blank" style="background:linear-gradient(135deg,var(--blue),var(--blue-bright));color:var(--white-fixed)!important;-webkit-text-fill-color:var(--white-fixed)!important;padding:0.45rem 1.1rem;border-radius:8px;font-weight:700!important;font-size:0.82rem!important;">🚀 Open App</a></li>
+    <li><a href="https://nivx-1016580972323.asia-southeast1.run.app" target="_blank" style="background:linear-gradient(135deg,var(--blue),var(--blue-bright));color:var(--white-fixed)!important;-webkit-text-fill-color:var(--white-fixed)!important;padding:0.45rem 1.1rem;border-radius:8px;font-weight:700!important;font-size:0.82rem!important;"><svg class="icon"><use href="#i-arrow-up-right"/></svg> Open App</a></li>
   </ul>
   <div class="nav-hamburger" id="hamburger" onclick="toggleMenu()">
     <span></span><span></span><span></span>
@@ -937,7 +1017,7 @@
   <a onclick="navigateTo('founder');toggleMenu()">Founder</a>
   <a onclick="navigateTo('faq');toggleMenu()">FAQ</a>
   <a onclick="navigateTo('contact');toggleMenu()">Contact</a>
-  <a href="https://nivx-1016580972323.asia-southeast1.run.app" target="_blank" style="color:var(--gold-bright)!important;font-weight:700;">🚀 Open App</a>
+  <a href="https://nivx-1016580972323.asia-southeast1.run.app" target="_blank" style="color:var(--gold-bright)!important;font-weight:700;"><svg class="icon"><use href="#i-arrow-up-right"/></svg> Open App</a>
 </div>
 
 <main id="mainContent">
@@ -959,7 +1039,7 @@
       <p class="hero-sub">NIVX is building a unified ecosystem where you can discover, verify, analyze, manage, invest in, learn about, and grow digital and real-world financial opportunities — through one intelligent platform.</p>
       <div class="hero-actions">
         <a href="https://nivx-1016580972323.asia-southeast1.run.app" target="_blank" class="btn-primary">
-          🚀 Open App
+          <svg class="icon"><use href="#i-arrow-up-right"/></svg> Open App
         </a>
         <button class="btn-secondary" onclick="document.getElementById('waitlistEmail').focus(); navigateTo('home');">
           Join the Waitlist →
@@ -1004,32 +1084,32 @@
     </div>
     <div class="card-grid fade-in">
       <div class="card">
-        <div class="card-icon blue">🔍</div>
+        <div class="card-icon blue"><svg class="icon"><use href="#i-search"/></svg></div>
         <h3>Smart Discovery</h3>
         <p>AI-powered opportunity scanning across stocks, mutual funds, real estate, and alternative assets tailored to your risk profile and goals.</p>
       </div>
       <div class="card">
-        <div class="card-icon gold">✅</div>
+        <div class="card-icon gold"><svg class="icon"><use href="#i-check-circle"/></svg></div>
         <h3>Proof Mode</h3>
         <p>Industry-first verification layer. Every claim, every asset, every return — independently verified and transparently displayed.</p>
       </div>
       <div class="card">
-        <div class="card-icon green">📈</div>
+        <div class="card-icon green"><svg class="icon"><use href="#i-trending-up"/></svg></div>
         <h3>Intelligent Investing</h3>
         <p>Research, analyze, and invest across asset classes from a single interface backed by real-time data and AI-driven insights.</p>
       </div>
       <div class="card">
-        <div class="card-icon blue">🔐</div>
+        <div class="card-icon blue"><svg class="icon"><use href="#i-lock"/></svg></div>
         <h3>Security Vault</h3>
         <p>Military-grade encryption for your digital ownership documents, investment proofs, and sensitive financial records.</p>
       </div>
       <div class="card">
-        <div class="card-icon gold">🎓</div>
+        <div class="card-icon gold"><svg class="icon"><use href="#i-graduation-cap"/></svg></div>
         <h3>Education Hub</h3>
         <p>Structured financial literacy programs from basics to advanced investing, delivered contextually within your actual portfolio.</p>
       </div>
       <div class="card">
-        <div class="card-icon green">🌐</div>
+        <div class="card-icon green"><svg class="icon"><use href="#i-globe"/></svg></div>
         <h3>Community Intelligence</h3>
         <p>Verified investor discussions, shared insights, and collective intelligence — without noise, anonymity abuse, or misinformation.</p>
       </div>
@@ -1048,32 +1128,32 @@
     <div class="ecosystem-container fade-in">
       <div class="eco-node">
         <div class="eco-item">
-          <div class="eco-icon">👤</div>
+          <div class="eco-icon"><svg class="icon"><use href="#i-user"/></svg></div>
           <div class="eco-text"><h4>You Join NIVX</h4><p>Complete your financial profile and goals in minutes</p></div>
         </div>
         <div class="eco-connector"></div>
         <div class="eco-item">
-          <div class="eco-icon">🔍</div>
+          <div class="eco-icon"><svg class="icon"><use href="#i-search"/></svg></div>
           <div class="eco-text"><h4>AI Discovers Opportunities</h4><p>Personalized opportunities across all asset classes surface for you</p></div>
         </div>
         <div class="eco-connector"></div>
         <div class="eco-item">
-          <div class="eco-icon">📊</div>
+          <div class="eco-icon"><svg class="icon"><use href="#i-bar-chart"/></svg></div>
           <div class="eco-text"><h4>Deep Analysis</h4><p>Research tools, risk calculators, and peer comparisons at your fingertips</p></div>
         </div>
         <div class="eco-connector"></div>
         <div class="eco-item">
-          <div class="eco-icon">✅</div>
+          <div class="eco-icon"><svg class="icon"><use href="#i-check-circle"/></svg></div>
           <div class="eco-text"><h4>Verification via Proof Mode</h4><p>Every asset and claim independently verified before you commit</p></div>
         </div>
         <div class="eco-connector"></div>
         <div class="eco-item">
-          <div class="eco-icon">💰</div>
+          <div class="eco-icon"><svg class="icon"><use href="#i-wallet"/></svg></div>
           <div class="eco-text"><h4>Invest with Confidence</h4><p>Execute investments knowing every data point has been authenticated</p></div>
         </div>
         <div class="eco-connector"></div>
         <div class="eco-item">
-          <div class="eco-icon">📈</div>
+          <div class="eco-icon"><svg class="icon"><use href="#i-trending-up"/></svg></div>
           <div class="eco-text"><h4>Track & Grow</h4><p>Real-time portfolio tracking, automated rebalancing suggestions, and performance reports</p></div>
         </div>
       </div>
@@ -1104,7 +1184,7 @@
 <div id="page-about" class="page">
   <div class="page-header">
     <div class="section-label">About NIVX</div>
-    <h1 class="section-title" style="font-family:var(--font-display);font-size:clamp(2rem,4vw,3rem);font-weight:800;">Building India's Most Trusted<br>Digital Ownership Ecosystem</h1>
+    <h1 class="section-title">Building India's Most Trusted<br>Digital Ownership Ecosystem</h1>
     <p class="section-sub" style="margin-top:1rem;">NIVX is not just another fintech app. It is a complete operating system for your financial life.</p>
   </div>
 
@@ -1125,19 +1205,19 @@
       </div>
       <div class="feature-visual">
         <div style="text-align:center;">
-          <div style="font-size:3.5rem;margin-bottom:1.5rem;">🏛️</div>
+          <div style="margin-bottom:1.4rem;"><svg class="icon icon-xl"><use href="#i-landmark"/></svg></div>
           <h3 style="font-family:var(--font-display);font-size:1.5rem;margin-bottom:1rem;">Our Core Philosophy</h3>
           <div style="display:flex;flex-direction:column;gap:1rem;text-align:left;">
             <div style="background:rgba(13,18,30,0.04);border-radius:10px;padding:1rem;">
-              <div style="font-weight:700;margin-bottom:0.35rem;">🎯 Ownership</div>
+              <div style="font-weight:700;margin-bottom:0.35rem;"><svg class="icon"><use href="#i-target"/></svg> Ownership</div>
               <div style="font-size:0.82rem;color:var(--white-dim);">Every Indian deserves to truly own and understand their financial assets, not just hold them in opaque systems.</div>
             </div>
             <div style="background:rgba(13,18,30,0.04);border-radius:10px;padding:1rem;">
-              <div style="font-weight:700;margin-bottom:0.35rem;">🔍 Transparency</div>
+              <div style="font-weight:700;margin-bottom:0.35rem;"><svg class="icon"><use href="#i-search"/></svg> Transparency</div>
               <div style="font-size:0.82rem;color:var(--white-dim);">Trust is built through radical transparency. Every verified claim, every data source, visible and auditable.</div>
             </div>
             <div style="background:rgba(13,18,30,0.04);border-radius:10px;padding:1rem;">
-              <div style="font-weight:700;margin-bottom:0.35rem;">📈 Growth</div>
+              <div style="font-weight:700;margin-bottom:0.35rem;"><svg class="icon"><use href="#i-trending-up"/></svg> Growth</div>
               <div style="font-size:0.82rem;color:var(--white-dim);">Wealth grows when intelligence, opportunity, and action converge. NIVX is that convergence point.</div>
             </div>
           </div>
@@ -1154,13 +1234,13 @@
       <h2 class="section-title">Why We Exist</h2>
     </div>
     <div class="card-grid card-grid-2 fade-in">
-      <div class="card" style="border-color:rgba(30,86,200,0.3);">
-        <div style="font-size:2rem;margin-bottom:1rem;">🎯</div>
+      <div class="card" style="border-color:rgba(11,18,32,0.3);">
+        <div style="margin-bottom:1.1rem;"><svg class="icon icon-lg"><use href="#i-target"/></svg></div>
         <h3>Mission</h3>
         <p>To democratize financial intelligence and digital ownership for every Indian — making wealth creation accessible, transparent, and secure regardless of economic background or financial literacy.</p>
       </div>
-      <div class="card" style="border-color:rgba(201,168,76,0.3);">
-        <div style="font-size:2rem;margin-bottom:1rem;">🌟</div>
+      <div class="card" style="border-color:rgba(200,169,106,0.3);">
+        <div style="margin-bottom:1.1rem;"><svg class="icon icon-lg"><use href="#i-star"/></svg></div>
         <h3>Vision</h3>
         <p>A world where every Indian has a personal wealth operating system that knows their goals, discovers their opportunities, verifies their assets, and guides their financial journey intelligently from first rupee to generational wealth.</p>
       </div>
@@ -1173,12 +1253,12 @@
       <h2 class="section-title">What Drives NIVX</h2>
     </div>
     <div class="card-grid fade-in">
-      <div class="card"><div class="card-icon gold">🛡️</div><h3>Trust First</h3><p>Every feature, every decision, every design choice is evaluated through the lens of: does this increase user trust?</p></div>
-      <div class="card"><div class="card-icon blue">💡</div><h3>Intelligence at Core</h3><p>AI isn't a feature at NIVX. It is the foundation. Every layer of the platform is powered by financial intelligence.</p></div>
-      <div class="card"><div class="card-icon green">🌱</div><h3>Growth for All</h3><p>Financial growth should not be restricted to the already-wealthy. NIVX is designed for every Indian, at every stage.</p></div>
-      <div class="card"><div class="card-icon gold">🔓</div><h3>Radical Transparency</h3><p>We operate on the principle that users who can see everything make better decisions. No black boxes at NIVX.</p></div>
-      <div class="card"><div class="card-icon blue">⚡</div><h3>Relentless Innovation</h3><p>India's financial ecosystem is evolving rapidly. NIVX stays ahead by building future-proof infrastructure today.</p></div>
-      <div class="card"><div class="card-icon green">🤝</div><h3>Community Power</h3><p>Collective intelligence, when verified and curated, is more powerful than any single algorithm. We build for communities.</p></div>
+      <div class="card"><div class="card-icon gold"><svg class="icon"><use href="#i-shield"/></svg></div><h3>Trust First</h3><p>Every feature, every decision, every design choice is evaluated through the lens of: does this increase user trust?</p></div>
+      <div class="card"><div class="card-icon blue"><svg class="icon"><use href="#i-lightbulb"/></svg></div><h3>Intelligence at Core</h3><p>AI isn't a feature at NIVX. It is the foundation. Every layer of the platform is powered by financial intelligence.</p></div>
+      <div class="card"><div class="card-icon green"><svg class="icon"><use href="#i-sprout"/></svg></div><h3>Growth for All</h3><p>Financial growth should not be restricted to the already-wealthy. NIVX is designed for every Indian, at every stage.</p></div>
+      <div class="card"><div class="card-icon gold"><svg class="icon"><use href="#i-eye"/></svg></div><h3>Radical Transparency</h3><p>We operate on the principle that users who can see everything make better decisions. No black boxes at NIVX.</p></div>
+      <div class="card"><div class="card-icon blue"><svg class="icon"><use href="#i-zap"/></svg></div><h3>Relentless Innovation</h3><p>India's financial ecosystem is evolving rapidly. NIVX stays ahead by building future-proof infrastructure today.</p></div>
+      <div class="card"><div class="card-icon green"><svg class="icon"><use href="#i-handshake"/></svg></div><h3>Community Power</h3><p>Collective intelligence, when verified and curated, is more powerful than any single algorithm. We build for communities.</p></div>
     </div>
   </section>
 </div>
@@ -1189,7 +1269,7 @@
 <div id="page-problem" class="page">
   <div class="page-header">
     <div class="section-label">The Problem</div>
-    <h1 class="section-title" style="font-family:var(--font-display);font-size:clamp(2rem,4vw,3rem);font-weight:800;">India's Broken Financial Landscape</h1>
+    <h1 class="section-title">India's Broken Financial Landscape</h1>
     <p class="section-sub" style="margin-top:1rem;">Millions of Indians want to build wealth. The system makes it unnecessarily hard. Here's why.</p>
   </div>
 
@@ -1235,7 +1315,7 @@
 <div id="page-features" class="page">
   <div class="page-header">
     <div class="section-label">Platform Features</div>
-    <h1 class="section-title" style="font-family:var(--font-display);font-size:clamp(2rem,4vw,3rem);font-weight:800;">Everything You Need to<br>Build Wealth Intelligently</h1>
+    <h1 class="section-title">Everything You Need to<br>Build Wealth Intelligently</h1>
     <p class="section-sub" style="margin-top:1rem;">Eight integrated verticals, one platform. Each feature designed for the Indian financial context.</p>
   </div>
 
@@ -1255,15 +1335,15 @@
       </ul>
     </div>
     <div class="feature-visual">
-      <div style="background:rgba(30,86,200,0.08);border-radius:10px;padding:1.5rem;margin-bottom:1rem;">
-        <div style="font-size:0.75rem;color:var(--blue-pale);font-weight:700;margin-bottom:0.75rem;">🤖 AI INSIGHT ENGINE</div>
+      <div style="background:rgba(11,18,32,0.08);border-radius:10px;padding:1.5rem;margin-bottom:1rem;">
+        <div style="font-size:0.75rem;color:var(--blue-pale);font-weight:700;margin-bottom:0.75rem;"><svg class="icon"><use href="#i-sparkle"/></svg> AI INSIGHT ENGINE</div>
         <div style="font-size:0.85rem;color:var(--white-dim);line-height:1.7;font-style:italic;">"Based on your portfolio, Nifty 50 index funds are underweight by 12%. Current valuations suggest gradual accumulation over the next 3 months could improve long-term returns by an estimated 2.1%."</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
-        <div style="background:rgba(13,18,30,0.04);border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:1.5rem;font-weight:800;color:var(--green-bright);">94</div><div style="font-size:0.7rem;color:var(--white-muted);">Portfolio Score</div></div>
-        <div style="background:rgba(13,18,30,0.04);border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:1.5rem;font-weight:800;color:var(--gold-bright);">12</div><div style="font-size:0.7rem;color:var(--white-muted);">Active Insights</div></div>
-        <div style="background:rgba(13,18,30,0.04);border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:1.5rem;font-weight:800;color:var(--blue-pale);">3</div><div style="font-size:0.7rem;color:var(--white-muted);">Opportunities Found</div></div>
-        <div style="background:rgba(13,18,30,0.04);border-radius:8px;padding:1rem;text-align:center;"><div style="font-size:1.5rem;font-weight:800;color:var(--white);">Low</div><div style="font-size:0.7rem;color:var(--white-muted);">Risk Alerts</div></div>
+        <div style="background:rgba(13,18,30,0.04);border-radius:8px;padding:1rem;text-align:center;"><div style="font-family:var(--font-numeric);font-size:1.5rem;font-weight:600;color:var(--green-bright);">94</div><div style="font-size:0.7rem;color:var(--white-muted);">Portfolio Score</div></div>
+        <div style="background:rgba(13,18,30,0.04);border-radius:8px;padding:1rem;text-align:center;"><div style="font-family:var(--font-numeric);font-size:1.5rem;font-weight:600;color:var(--gold-bright);">12</div><div style="font-size:0.7rem;color:var(--white-muted);">Active Insights</div></div>
+        <div style="background:rgba(13,18,30,0.04);border-radius:8px;padding:1rem;text-align:center;"><div style="font-family:var(--font-numeric);font-size:1.5rem;font-weight:600;color:var(--blue-pale);">3</div><div style="font-size:0.7rem;color:var(--white-muted);">Opportunities Found</div></div>
+        <div style="background:rgba(13,18,30,0.04);border-radius:8px;padding:1rem;text-align:center;"><div style="font-family:var(--font-numeric);font-size:1.5rem;font-weight:600;color:var(--white);">Low</div><div style="font-size:0.7rem;color:var(--white-muted);">Risk Alerts</div></div>
       </div>
     </div>
   </div>
@@ -1274,28 +1354,28 @@
   <div class="feature-row reverse fade-in" style="padding:4rem 5%;">
     <div class="feature-visual">
       <div style="margin-bottom:1rem;">
-        <div style="font-size:0.75rem;color:var(--gold);font-weight:700;letter-spacing:0.1em;margin-bottom:1rem;">✅ VERIFICATION STATUS</div>
+        <div style="font-size:0.75rem;color:var(--gold);font-weight:700;letter-spacing:0.1em;margin-bottom:1rem;"><svg class="icon"><use href="#i-check-circle"/></svg> VERIFICATION STATUS</div>
         <div style="display:flex;flex-direction:column;gap:0.75rem;">
-          <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(26,173,110,0.08);border:1px solid rgba(26,173,110,0.2);border-radius:8px;padding:0.75rem 1rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(14,165,107,0.08);border:1px solid rgba(14,165,107,0.2);border-radius:8px;padding:0.75rem 1rem;">
             <span style="font-size:0.85rem;">Company Registration</span>
-            <span style="color:var(--green-bright);font-weight:700;font-size:0.8rem;">✅ VERIFIED</span>
+            <span style="color:var(--green-bright);font-weight:700;font-size:0.8rem;"><svg class="icon"><use href="#i-check-circle"/></svg> VERIFIED</span>
           </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(26,173,110,0.08);border:1px solid rgba(26,173,110,0.2);border-radius:8px;padding:0.75rem 1rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(14,165,107,0.08);border:1px solid rgba(14,165,107,0.2);border-radius:8px;padding:0.75rem 1rem;">
             <span style="font-size:0.85rem;">SEBI Registration</span>
-            <span style="color:var(--green-bright);font-weight:700;font-size:0.8rem;">✅ VERIFIED</span>
+            <span style="color:var(--green-bright);font-weight:700;font-size:0.8rem;"><svg class="icon"><use href="#i-check-circle"/></svg> VERIFIED</span>
           </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(26,173,110,0.08);border:1px solid rgba(26,173,110,0.2);border-radius:8px;padding:0.75rem 1rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(14,165,107,0.08);border:1px solid rgba(14,165,107,0.2);border-radius:8px;padding:0.75rem 1rem;">
             <span style="font-size:0.85rem;">Claimed Returns</span>
-            <span style="color:var(--green-bright);font-weight:700;font-size:0.8rem;">✅ VERIFIED</span>
+            <span style="color:var(--green-bright);font-weight:700;font-size:0.8rem;"><svg class="icon"><use href="#i-check-circle"/></svg> VERIFIED</span>
           </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,90,90,0.08);border:1px solid rgba(255,90,90,0.2);border-radius:8px;padding:0.75rem 1rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(163,52,42,0.08);border:1px solid rgba(163,52,42,0.2);border-radius:8px;padding:0.75rem 1rem;">
             <span style="font-size:0.85rem;">Advisor Credential</span>
-            <span style="color:#ff5c5c;font-weight:700;font-size:0.8rem;">❌ FAILED</span>
+            <span style="color:#A3342A;font-weight:700;font-size:0.8rem;"><svg class="icon"><use href="#i-x-circle"/></svg> FAILED</span>
           </div>
         </div>
       </div>
-      <div style="background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);border-radius:8px;padding:0.85rem 1rem;">
-        <div style="font-size:0.75rem;color:var(--gold-bright);font-weight:700;">⚠️ NIVX PROOF ALERT: 1 verification failed — review before investing.</div>
+      <div style="background:rgba(200,169,106,0.08);border:1px solid rgba(200,169,106,0.2);border-radius:8px;padding:0.85rem 1rem;">
+        <div style="font-size:0.75rem;color:var(--gold-bright);font-weight:700;"><svg class="icon"><use href="#i-alert-triangle"/></svg> NIVX PROOF ALERT: 1 verification failed — review before investing.</div>
       </div>
     </div>
     <div>
@@ -1347,11 +1427,11 @@
         </div>
         <div>
           <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.25rem;"><span>Alternatives</span><span style="color:var(--gold-bright);">10%</span></div>
-          <div style="height:8px;background:rgba(13,18,30,0.08);border-radius:4px;"><div style="height:100%;width:10%;background:rgba(130,90,210,0.8);border-radius:4px;"></div></div>
+          <div style="height:8px;background:rgba(13,18,30,0.08);border-radius:4px;"><div style="height:100%;width:10%;background:rgba(107,114,128,0.8);border-radius:4px;"></div></div>
         </div>
       </div>
-      <div style="margin-top:1.5rem;background:rgba(26,173,110,0.08);border:1px solid rgba(26,173,110,0.2);border-radius:8px;padding:0.85rem 1rem;font-size:0.82rem;color:var(--white-dim);">
-        📊 AI Suggestion: Consider adding 5% SGBs to hedge against inflation.
+      <div style="margin-top:1.5rem;background:rgba(14,165,107,0.08);border:1px solid rgba(14,165,107,0.2);border-radius:8px;padding:0.85rem 1rem;font-size:0.82rem;color:var(--white-dim);">
+        <svg class="icon"><use href="#i-bar-chart"/></svg> AI Suggestion: Consider adding 5% SGBs to hedge against inflation.
       </div>
     </div>
   </div>
@@ -1365,12 +1445,12 @@
       <h2 class="section-title">Every Tool You Need</h2>
     </div>
     <div class="card-grid fade-in">
-      <div class="card"><div class="card-icon gold">🔐</div><h3>Security Vault</h3><p>AES-256 encrypted storage for demat statements, insurance policies, property documents, and all financial records. Accessible anywhere, secured everywhere.</p></div>
-      <div class="card"><div class="card-icon blue">📊</div><h3>Analytics & Reports</h3><p>Automated monthly and annual performance reports. XIRR calculations, benchmark comparisons, tax reports, and capital gains statements generated automatically.</p></div>
-      <div class="card"><div class="card-icon green">🎓</div><h3>Education Hub</h3><p>250+ lessons from investing basics to advanced derivatives strategy. Integrated with your portfolio so you learn from what you own.</p></div>
-      <div class="card"><div class="card-icon blue">👥</div><h3>Community Intelligence</h3><p>Verified investor forums with reputation-weighted insights. No anonymous tips. Every participant's track record is visible and auditable.</p></div>
-      <div class="card"><div class="card-icon gold">📱</div><h3>Real-Time Tracking</h3><p>Live portfolio valuation across all assets. Custom watchlists, price alerts, and news feeds filtered to your holdings and interests.</p></div>
-      <div class="card"><div class="card-icon green">🎯</div><h3>Goal-Based Planning</h3><p>Define your financial goals — retirement, home, education, travel. NIVX builds an investment roadmap and tracks your progress automatically.</p></div>
+      <div class="card"><div class="card-icon gold"><svg class="icon"><use href="#i-lock"/></svg></div><h3>Security Vault</h3><p>AES-256 encrypted storage for demat statements, insurance policies, property documents, and all financial records. Accessible anywhere, secured everywhere.</p></div>
+      <div class="card"><div class="card-icon blue"><svg class="icon"><use href="#i-bar-chart"/></svg></div><h3>Analytics & Reports</h3><p>Automated monthly and annual performance reports. XIRR calculations, benchmark comparisons, tax reports, and capital gains statements generated automatically.</p></div>
+      <div class="card"><div class="card-icon green"><svg class="icon"><use href="#i-graduation-cap"/></svg></div><h3>Education Hub</h3><p>250+ lessons from investing basics to advanced derivatives strategy. Integrated with your portfolio so you learn from what you own.</p></div>
+      <div class="card"><div class="card-icon blue"><svg class="icon"><use href="#i-users"/></svg></div><h3>Community Intelligence</h3><p>Verified investor forums with reputation-weighted insights. No anonymous tips. Every participant's track record is visible and auditable.</p></div>
+      <div class="card"><div class="card-icon gold"><svg class="icon"><use href="#i-smartphone"/></svg></div><h3>Real-Time Tracking</h3><p>Live portfolio valuation across all assets. Custom watchlists, price alerts, and news feeds filtered to your holdings and interests.</p></div>
+      <div class="card"><div class="card-icon green"><svg class="icon"><use href="#i-target"/></svg></div><h3>Goal-Based Planning</h3><p>Define your financial goals — retirement, home, education, travel. NIVX builds an investment roadmap and tracks your progress automatically.</p></div>
     </div>
   </section>
 </div>
@@ -1381,71 +1461,71 @@
 <div id="page-ecosystem" class="page">
   <div class="page-header">
     <div class="section-label">The NIVX Ecosystem</div>
-    <h1 class="section-title" style="font-family:var(--font-display);font-size:clamp(2rem,4vw,3rem);font-weight:800;">Eight Verticals.<br>One Unified Platform.</h1>
+    <h1 class="section-title">Eight Verticals.<br>One Unified Platform.</h1>
     <p class="section-sub" style="margin-top:1rem;">NIVX connects every dimension of your financial life into one coherent, intelligent ecosystem.</p>
   </div>
 
   <section>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;" class="fade-in">
-      <div class="card" style="border-color:rgba(30,86,200,0.3);">
+      <div class="card" style="border-color:rgba(11,18,32,0.3);">
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
-          <div class="card-icon blue" style="margin:0;">🔍</div>
+          <div class="card-icon blue" style="margin:0;"><svg class="icon"><use href="#i-search"/></svg></div>
           <div><span class="badge badge-blue">Vertical 1</span><h3 style="margin:0;margin-top:0.25rem;">Discovery Engine</h3></div>
         </div>
         <p>AI-curated investment opportunities surfaced from equity markets, mutual fund universe, IPO pipeline, bond market, REITs, and alternative assets.</p>
         <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);font-size:0.78rem;color:var(--white-muted);">Connects to → Analysis Engine, Investment Gateway</div>
       </div>
-      <div class="card" style="border-color:rgba(201,168,76,0.3);">
+      <div class="card" style="border-color:rgba(200,169,106,0.3);">
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
-          <div class="card-icon gold" style="margin:0;">✅</div>
+          <div class="card-icon gold" style="margin:0;"><svg class="icon"><use href="#i-check-circle"/></svg></div>
           <div><span class="badge badge-gold">Vertical 2</span><h3 style="margin:0;margin-top:0.25rem;">Proof Mode</h3></div>
         </div>
         <p>Verification infrastructure that validates regulatory registrations, audited returns, advisor credentials, and company legitimacy in real time.</p>
         <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);font-size:0.78rem;color:var(--white-muted);">Connects to → All Verticals (Trust Layer)</div>
       </div>
-      <div class="card" style="border-color:rgba(26,173,110,0.3);">
+      <div class="card" style="border-color:rgba(14,165,107,0.3);">
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
-          <div class="card-icon green" style="margin:0;">💰</div>
+          <div class="card-icon green" style="margin:0;"><svg class="icon"><use href="#i-wallet"/></svg></div>
           <div><span class="badge badge-green">Vertical 3</span><h3 style="margin:0;margin-top:0.25rem;">Investment Gateway</h3></div>
         </div>
         <p>Unified investment execution layer for mutual funds, equity, bonds, IPOs, and alternative assets. Single KYC, single interface, all asset classes.</p>
         <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);font-size:0.78rem;color:var(--white-muted);">Connects to → Portfolio Tracker, Analytics</div>
       </div>
-      <div class="card" style="border-color:rgba(30,86,200,0.3);">
+      <div class="card" style="border-color:rgba(11,18,32,0.3);">
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
-          <div class="card-icon blue" style="margin:0;">📊</div>
+          <div class="card-icon blue" style="margin:0;"><svg class="icon"><use href="#i-bar-chart"/></svg></div>
           <div><span class="badge badge-blue">Vertical 4</span><h3 style="margin:0;margin-top:0.25rem;">Analytics & Insights</h3></div>
         </div>
         <p>Deep portfolio analytics including XIRR tracking, benchmark comparison, risk-adjusted returns, tax projections, and automated financial reports.</p>
         <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);font-size:0.78rem;color:var(--white-muted);">Connects to → AI Engine, Reporting Layer</div>
       </div>
-      <div class="card" style="border-color:rgba(201,168,76,0.3);">
+      <div class="card" style="border-color:rgba(200,169,106,0.3);">
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
-          <div class="card-icon gold" style="margin:0;">🔐</div>
+          <div class="card-icon gold" style="margin:0;"><svg class="icon"><use href="#i-lock"/></svg></div>
           <div><span class="badge badge-gold">Vertical 5</span><h3 style="margin:0;margin-top:0.25rem;">Security Vault</h3></div>
         </div>
         <p>Encrypted digital vault for all financial ownership documents — demat statements, insurance policies, property papers, investment certificates.</p>
         <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);font-size:0.78rem;color:var(--white-muted);">Connects to → Proof Mode, Portfolio Tracker</div>
       </div>
-      <div class="card" style="border-color:rgba(26,173,110,0.3);">
+      <div class="card" style="border-color:rgba(14,165,107,0.3);">
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
-          <div class="card-icon green" style="margin:0;">🎓</div>
+          <div class="card-icon green" style="margin:0;"><svg class="icon"><use href="#i-graduation-cap"/></svg></div>
           <div><span class="badge badge-green">Vertical 6</span><h3 style="margin:0;margin-top:0.25rem;">Education Hub</h3></div>
         </div>
         <p>Contextual financial literacy delivered inline with portfolio activity. Structured learning paths from first SIP to advanced equity analysis.</p>
         <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);font-size:0.78rem;color:var(--white-muted);">Connects to → Discovery Engine, Community</div>
       </div>
-      <div class="card" style="border-color:rgba(130,90,210,0.3);">
+      <div class="card" style="border-color:rgba(107,114,128,0.3);">
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
-          <div class="card-icon purple" style="margin:0;">👥</div>
-          <div><span class="badge" style="background:rgba(130,90,210,0.15);color:#b08af5;">Vertical 7</span><h3 style="margin:0;margin-top:0.25rem;">Community</h3></div>
+          <div class="card-icon purple" style="margin:0;"><svg class="icon"><use href="#i-users"/></svg></div>
+          <div><span class="badge">Vertical 7</span><h3 style="margin:0;margin-top:0.25rem;">Community</h3></div>
         </div>
         <p>Verified investor community with reputation scores tied to actual portfolio performance. Insights, discussions, and shared research — no anonymous noise.</p>
         <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);font-size:0.78rem;color:var(--white-muted);">Connects to → Proof Mode, Education Hub</div>
       </div>
-      <div class="card" style="border-color:rgba(30,86,200,0.3);">
+      <div class="card" style="border-color:rgba(11,18,32,0.3);">
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
-          <div class="card-icon blue" style="margin:0;">🤖</div>
+          <div class="card-icon blue" style="margin:0;"><svg class="icon"><use href="#i-sparkle"/></svg></div>
           <div><span class="badge badge-blue">Vertical 8</span><h3 style="margin:0;margin-top:0.25rem;">AI Intelligence Layer</h3></div>
         </div>
         <p>The intelligence backbone powering all other verticals. Processes market data, user behavior, and external signals to deliver personalized financial intelligence.</p>
@@ -1461,21 +1541,21 @@
     </div>
     <div class="ecosystem-container fade-in">
       <div class="eco-node">
-        <div class="eco-item"><div class="eco-icon">👤</div><div class="eco-text"><h4>User Onboards</h4><p>Single KYC, financial profile, goal setting</p></div></div>
+        <div class="eco-item"><div class="eco-icon"><svg class="icon"><use href="#i-user"/></svg></div><div class="eco-text"><h4>User Onboards</h4><p>Single KYC, financial profile, goal setting</p></div></div>
         <div class="eco-connector"></div>
-        <div class="eco-item"><div class="eco-icon">🤖</div><div class="eco-text"><h4>AI Personalizes</h4><p>Intelligence engine configures all verticals to your profile</p></div></div>
+        <div class="eco-item"><div class="eco-icon"><svg class="icon"><use href="#i-sparkle"/></svg></div><div class="eco-text"><h4>AI Personalizes</h4><p>Intelligence engine configures all verticals to your profile</p></div></div>
         <div class="eco-connector"></div>
-        <div class="eco-item"><div class="eco-icon">🔍</div><div class="eco-text"><h4>Discovery Activates</h4><p>Personalized opportunity feed surfaces relevant investments</p></div></div>
+        <div class="eco-item"><div class="eco-icon"><svg class="icon"><use href="#i-search"/></svg></div><div class="eco-text"><h4>Discovery Activates</h4><p>Personalized opportunity feed surfaces relevant investments</p></div></div>
         <div class="eco-connector"></div>
-        <div class="eco-item"><div class="eco-icon">✅</div><div class="eco-text"><h4>Proof Mode Verifies</h4><p>Every opportunity validated before you see it</p></div></div>
+        <div class="eco-item"><div class="eco-icon"><svg class="icon"><use href="#i-check-circle"/></svg></div><div class="eco-text"><h4>Proof Mode Verifies</h4><p>Every opportunity validated before you see it</p></div></div>
         <div class="eco-connector"></div>
-        <div class="eco-item"><div class="eco-icon">🎓</div><div class="eco-text"><h4>Education Contextualizes</h4><p>Learn about the specific investment type inline</p></div></div>
+        <div class="eco-item"><div class="eco-icon"><svg class="icon"><use href="#i-graduation-cap"/></svg></div><div class="eco-text"><h4>Education Contextualizes</h4><p>Learn about the specific investment type inline</p></div></div>
         <div class="eco-connector"></div>
-        <div class="eco-item"><div class="eco-icon">💰</div><div class="eco-text"><h4>Investment Executes</h4><p>One-click execution across any verified asset class</p></div></div>
+        <div class="eco-item"><div class="eco-icon"><svg class="icon"><use href="#i-wallet"/></svg></div><div class="eco-text"><h4>Investment Executes</h4><p>One-click execution across any verified asset class</p></div></div>
         <div class="eco-connector"></div>
-        <div class="eco-item"><div class="eco-icon">📊</div><div class="eco-text"><h4>Analytics Track</h4><p>Real-time performance, automated reports, tax prep</p></div></div>
+        <div class="eco-item"><div class="eco-icon"><svg class="icon"><use href="#i-bar-chart"/></svg></div><div class="eco-text"><h4>Analytics Track</h4><p>Real-time performance, automated reports, tax prep</p></div></div>
         <div class="eco-connector"></div>
-        <div class="eco-item"><div class="eco-icon">🔐</div><div class="eco-text"><h4>Vault Secures</h4><p>Documents encrypted and stored automatically</p></div></div>
+        <div class="eco-item"><div class="eco-icon"><svg class="icon"><use href="#i-lock"/></svg></div><div class="eco-text"><h4>Vault Secures</h4><p>Documents encrypted and stored automatically</p></div></div>
       </div>
     </div>
   </section>
@@ -1487,7 +1567,7 @@
 <div id="page-why" class="page">
   <div class="page-header">
     <div class="section-label">Why NIVX</div>
-    <h1 class="section-title" style="font-family:var(--font-display);font-size:clamp(2rem,4vw,3rem);font-weight:800;">Why the World Needs NIVX</h1>
+    <h1 class="section-title">Why the World Needs NIVX</h1>
     <p class="section-sub" style="margin-top:1rem;">Every great platform exists because no alternative was good enough. Here's why NIVX is different.</p>
   </div>
 
@@ -1530,33 +1610,33 @@
       <h2 class="section-title">What Makes NIVX Genuinely Different</h2>
     </div>
     <div class="card-grid fade-in">
-      <div class="card" style="border-color:rgba(201,168,76,0.3);">
-        <div style="font-size:2.5rem;margin-bottom:1rem;">🔑</div>
+      <div class="card" style="border-color:rgba(200,169,106,0.3);">
+        <div style="margin-bottom:1.1rem;"><svg class="icon icon-xl"><use href="#i-key"/></svg></div>
         <h3>Proof Mode is Unique</h3>
         <p>No other platform in India independently verifies investment claims and advisor credentials. Proof Mode is a structural moat that builds trust no competitor can replicate quickly.</p>
       </div>
-      <div class="card" style="border-color:rgba(30,86,200,0.3);">
-        <div style="font-size:2.5rem;margin-bottom:1rem;">🧠</div>
+      <div class="card" style="border-color:rgba(11,18,32,0.3);">
+        <div style="margin-bottom:1.1rem;"><svg class="icon icon-xl"><use href="#i-sparkle"/></svg></div>
         <h3>Truly Unified Intelligence</h3>
         <p>Most platforms aggregate data. NIVX makes it intelligent. AI that understands your complete financial picture — not just one asset class — enables advice competitors cannot match.</p>
       </div>
-      <div class="card" style="border-color:rgba(26,173,110,0.3);">
-        <div style="font-size:2.5rem;margin-bottom:1rem;">🎓</div>
+      <div class="card" style="border-color:rgba(14,165,107,0.3);">
+        <div style="margin-bottom:1.1rem;"><svg class="icon icon-xl"><use href="#i-graduation-cap"/></svg></div>
         <h3>Education That Compounds</h3>
         <p>Learning embedded in actual investment workflows means users become financially literate while doing — not studying in isolation. This drives better decisions and deeper platform engagement.</p>
       </div>
-      <div class="card" style="border-color:rgba(201,168,76,0.3);">
-        <div style="font-size:2.5rem;margin-bottom:1rem;">🌐</div>
+      <div class="card" style="border-color:rgba(200,169,106,0.3);">
+        <div style="margin-bottom:1.1rem;"><svg class="icon icon-xl"><use href="#i-globe"/></svg></div>
         <h3>Community with Accountability</h3>
         <p>Verified identities with public track records transform community from noise into signal. Reputation-weighted insights create a trusted financial intelligence network that grows more valuable with every user.</p>
       </div>
-      <div class="card" style="border-color:rgba(30,86,200,0.3);">
-        <div style="font-size:2.5rem;margin-bottom:1rem;">📱</div>
+      <div class="card" style="border-color:rgba(11,18,32,0.3);">
+        <div style="margin-bottom:1.1rem;"><svg class="icon icon-xl"><use href="#i-smartphone"/></svg></div>
         <h3>Built for India</h3>
         <p>NIVX is designed for Indian regulatory structures, Indian investment products (SGBs, NPS, PPF), Indian user behaviors, and Indian tax laws. Not a Western product adapted for India.</p>
       </div>
-      <div class="card" style="border-color:rgba(26,173,110,0.3);">
-        <div style="font-size:2.5rem;margin-bottom:1rem;">⚡</div>
+      <div class="card" style="border-color:rgba(14,165,107,0.3);">
+        <div style="margin-bottom:1.1rem;"><svg class="icon icon-xl"><use href="#i-zap"/></svg></div>
         <h3>Network Effects at Scale</h3>
         <p>The more users NIVX has, the more valuable the verified community becomes, the better the AI models get, and the stronger Proof Mode's data network becomes. Classic flywheel built for scale.</p>
       </div>
@@ -1571,7 +1651,7 @@
   <div class="vision-hero fade-in">
     <div style="max-width:800px;">
       <div class="section-label">Our Vision</div>
-      <h1 style="font-family:var(--font-display);font-size:clamp(2.5rem,5vw,4rem);font-weight:800;line-height:1.1;margin-bottom:1.5rem;">
+      <h1 style="font-family:var(--font-display);font-size:clamp(2.5rem,5vw,4rem);font-weight:700;line-height:1.1;margin-bottom:1.5rem;">
         Building the Future<br>of <span style="color:var(--gold-bright);">Digital Ownership</span>
       </h1>
       <p style="font-size:1.15rem;color:var(--white-dim);line-height:1.8;max-width:620px;">We believe every Indian deserves a financial operating system that is as sophisticated as their ambitions — regardless of whether they were born wealthy or are building wealth from scratch.</p>
@@ -1599,32 +1679,32 @@
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.5rem;" class="fade-in">
       <div class="vision-pillar">
-        <span class="vp-icon">💡</span>
+        <span class="vp-icon"><svg class="icon"><use href="#i-lightbulb"/></svg></span>
         <h3>Financial Empowerment</h3>
         <p>Every Indian empowered with institutional-grade financial tools and intelligence, regardless of wealth or background.</p>
       </div>
       <div class="vision-pillar">
-        <span class="vp-icon">🌐</span>
+        <span class="vp-icon"><svg class="icon"><use href="#i-globe"/></svg></span>
         <h3>Radical Accessibility</h3>
         <p>Investment opportunities and financial education accessible in every language, at every income level, from any device.</p>
       </div>
       <div class="vision-pillar">
-        <span class="vp-icon">🔍</span>
+        <span class="vp-icon"><svg class="icon"><use href="#i-search"/></svg></span>
         <h3>Opportunity Discovery</h3>
         <p>No quality investment opportunity should go undiscovered because someone lacked access to the right network or information.</p>
       </div>
       <div class="vision-pillar">
-        <span class="vp-icon">🎓</span>
+        <span class="vp-icon"><svg class="icon"><use href="#i-graduation-cap"/></svg></span>
         <h3>Universal Financial Literacy</h3>
         <p>A financially literate population makes better individual decisions and builds a more resilient national economy.</p>
       </div>
       <div class="vision-pillar">
-        <span class="vp-icon">🛡️</span>
+        <span class="vp-icon"><svg class="icon"><use href="#i-shield"/></svg></span>
         <h3>Absolute Security</h3>
         <p>Financial information and documents secured with the same rigor as national infrastructure, accessible only to their owners.</p>
       </div>
       <div class="vision-pillar">
-        <span class="vp-icon">🌱</span>
+        <span class="vp-icon"><svg class="icon"><use href="#i-sprout"/></svg></span>
         <h3>Generational Wealth</h3>
         <p>Helping Indian families build wealth that compounds across generations, not just within one lifetime.</p>
       </div>
@@ -1652,7 +1732,7 @@
 <div id="page-founder" class="page">
   <div class="page-header">
     <div class="section-label">Leadership</div>
-    <h1 class="section-title" style="font-family:var(--font-display);font-size:clamp(2rem,4vw,3rem);font-weight:800;">The Founder</h1>
+    <h1 class="section-title">The Founder</h1>
   </div>
 
   <div class="founder-section fade-in">
@@ -1670,10 +1750,10 @@
           <span>in</span> LinkedIn
         </a>
         <a href="https://www.instagram.com/nivx2026" target="_blank" class="social-btn">
-          <span>📷</span> Instagram
+          <span><svg class="icon"><use href="#i-camera"/></svg></span> Instagram
         </a>
         <a href="https://youtube.com/@nivx-i9q" target="_blank" class="social-btn">
-          <span>▶</span> YouTube
+          <span><svg class="icon"><use href="#i-play"/></svg></span> YouTube
         </a>
       </div>
     </div>
@@ -1688,17 +1768,17 @@
     </div>
     <div class="card-grid card-grid-3 fade-in">
       <div class="card" style="text-align:center;">
-        <div style="font-size:2.5rem;margin-bottom:1rem;">🎯</div>
+        <div style="margin-bottom:1.1rem;"><svg class="icon icon-xl"><use href="#i-target"/></svg></div>
         <h3>Build with Purpose</h3>
         <p>Every feature in NIVX exists because it solves a real problem for a real Indian user. There are no features at NIVX that exist for appearance alone.</p>
       </div>
       <div class="card" style="text-align:center;">
-        <div style="font-size:2.5rem;margin-bottom:1rem;">🔭</div>
+        <div style="margin-bottom:1.1rem;"><svg class="icon icon-xl"><use href="#i-compass"/></svg></div>
         <h3>Think in Decades</h3>
         <p>NIVX is not being built for the next funding round. It is being built to become enduring financial infrastructure that India will rely on for generations.</p>
       </div>
       <div class="card" style="text-align:center;">
-        <div style="font-size:2.5rem;margin-bottom:1rem;">🛡️</div>
+        <div style="margin-bottom:1.1rem;"><svg class="icon icon-xl"><use href="#i-shield"/></svg></div>
         <h3>Trust is Everything</h3>
         <p>In financial services, trust is not a marketing message — it is the product itself. Proof Mode was the first thing built, because without trust, nothing else matters.</p>
       </div>
@@ -1710,7 +1790,7 @@
       <h3 style="margin-bottom:0.5rem;color:var(--white-fixed);">Reach Out to Atharva Directly</h3>
       <p style="margin-bottom:1.5rem;">For investor inquiries, partnership discussions, or media opportunities.</p>
       <div style="display:flex;flex-wrap:wrap;gap:0.75rem;justify-content:center;">
-        <a href="mailto:atharvachavanke@gmail.com" class="btn-primary" style="-webkit-text-fill-color:var(--navy-fixed);">✉️ Send Email</a>
+        <a href="mailto:atharvachavanke@gmail.com" class="btn-primary" style="-webkit-text-fill-color:var(--navy-fixed);"><svg class="icon"><use href="#i-mail"/></svg> Send Email</a>
         <button class="btn-secondary" onclick="navigateTo('contact')" style="color:white;border-color:rgba(255,255,255,0.3);">Contact Page →</button>
       </div>
     </div>
@@ -1723,7 +1803,7 @@
 <div id="page-faq" class="page">
   <div class="page-header">
     <div class="section-label">FAQ</div>
-    <h1 class="section-title" style="font-family:var(--font-display);font-size:clamp(2rem,4vw,3rem);font-weight:800;">Frequently Asked Questions</h1>
+    <h1 class="section-title">Frequently Asked Questions</h1>
     <p class="section-sub" style="margin-top:1rem;">Everything you need to know about NIVX and the platform we're building.</p>
   </div>
 
@@ -1743,7 +1823,7 @@
 
   <section style="padding:2rem 5% 4rem;">
     <div class="waitlist-banner fade-in" style="background:linear-gradient(135deg,var(--navy-surface),var(--navy-light));">
-      <h3>Still Have Questions?</h3>
+      <h3 style="color:var(--white);">Still Have Questions?</h3>
       <p style="color:var(--white-dim);">Our team is happy to answer anything we haven't covered above.</p>
       <button class="btn-primary" onclick="navigateTo('contact')">Contact Us →</button>
     </div>
@@ -1756,7 +1836,7 @@
 <div id="page-contact" class="page">
   <div class="page-header">
     <div class="section-label">Get in Touch</div>
-    <h1 class="section-title" style="font-family:var(--font-display);font-size:clamp(2rem,4vw,3rem);font-weight:800;">Let's Build Something<br>Extraordinary Together</h1>
+    <h1 class="section-title">Let's Build Something<br>Extraordinary Together</h1>
     <p class="section-sub" style="margin-top:1rem;">Investors, partners, media, or anyone who wants to be part of India's financial transformation.</p>
   </div>
 
@@ -1765,14 +1845,14 @@
       <div>
         <div class="contact-info-card">
           <div class="contact-info-item">
-            <div class="ci-icon">📱</div>
+            <div class="ci-icon"><svg class="icon"><use href="#i-smartphone"/></svg></div>
             <div class="ci-text">
               <div class="label">Phone</div>
               <a href="tel:+917028654722">+91 7028654722</a>
             </div>
           </div>
           <div class="contact-info-item">
-            <div class="ci-icon">✉️</div>
+            <div class="ci-icon"><svg class="icon"><use href="#i-mail"/></svg></div>
             <div class="ci-text">
               <div class="label">Email</div>
               <a href="mailto:atharvachavanke@gmail.com">atharvachavanke@gmail.com</a>
@@ -1786,14 +1866,14 @@
             </div>
           </div>
           <div class="contact-info-item">
-            <div class="ci-icon">📷</div>
+            <div class="ci-icon"><svg class="icon"><use href="#i-camera"/></svg></div>
             <div class="ci-text">
               <div class="label">Instagram</div>
               <a href="https://www.instagram.com/nivx2026?igsh=MTJubm15Z3ViY2hneg==" target="_blank">@nivx2026</a>
             </div>
           </div>
           <div class="contact-info-item">
-            <div class="ci-icon">▶</div>
+            <div class="ci-icon"><svg class="icon"><use href="#i-play"/></svg></div>
             <div class="ci-text">
               <div class="label">YouTube</div>
               <a href="https://youtube.com/@nivx-i9q?si=EEcVGDPvTAX_HkXm" target="_blank">@nivx-i9q</a>
@@ -1821,7 +1901,7 @@
             </div>
           </div>
           <div class="contact-info-item">
-            <div class="ci-icon">💬</div>
+            <div class="ci-icon"><svg class="icon"><use href="#i-message-circle"/></svg></div>
             <div class="ci-text">
               <div class="label">WhatsApp Channel</div>
               <a href="https://whatsapp.com/channel/0029VbCvJN9JuyAHNUUP9T3C" target="_blank">Join our Channel</a>
@@ -1830,16 +1910,16 @@
         </div>
         <div class="social-links" style="margin-top:1rem;flex-wrap:wrap;gap:0.5rem;">
           <a href="https://www.linkedin.com/company/nivx/?utm_source=ig&utm_medium=social&utm_content=link_in_bio" target="_blank" class="social-btn">in LinkedIn</a>
-          <a href="https://www.instagram.com/nivx2026?igsh=MTJubm15Z3ViY2hneg==" target="_blank" class="social-btn">📷 Instagram</a>
-          <a href="https://youtube.com/@nivx-i9q?si=EEcVGDPvTAX_HkXm" target="_blank" class="social-btn">▶ YouTube</a>
+          <a href="https://www.instagram.com/nivx2026?igsh=MTJubm15Z3ViY2hneg==" target="_blank" class="social-btn"><svg class="icon"><use href="#i-camera"/></svg> Instagram</a>
+          <a href="https://youtube.com/@nivx-i9q?si=EEcVGDPvTAX_HkXm" target="_blank" class="social-btn"><svg class="icon"><use href="#i-play"/></svg> YouTube</a>
           <a href="https://www.threads.com/@nivx2026" target="_blank" class="social-btn">𝕿 Threads</a>
           <a href="https://www.facebook.com/share/18kaqveAF9/" target="_blank" class="social-btn">f Facebook</a>
           <a href="https://x.com/NIVX121X" target="_blank" class="social-btn">𝕏 Twitter/X</a>
-          <a href="https://whatsapp.com/channel/0029VbCvJN9JuyAHNUUP9T3C" target="_blank" class="social-btn">💬 WhatsApp</a>
+          <a href="https://whatsapp.com/channel/0029VbCvJN9JuyAHNUUP9T3C" target="_blank" class="social-btn"><svg class="icon"><use href="#i-message-circle"/></svg> WhatsApp</a>
         </div>
 
-        <div style="margin-top:2rem;background:linear-gradient(135deg,var(--blue),#0e3fa0);border:1px solid rgba(45,110,240,0.4);border-radius:var(--radius);padding:1.5rem;text-align:center;">
-          <div style="font-size:1.5rem;margin-bottom:0.5rem;">🚀</div>
+        <div style="margin-top:2rem;background:linear-gradient(135deg,var(--blue),#1A2438);border:1px solid rgba(26,36,56,0.5);border-radius:var(--radius);padding:1.75rem;text-align:center;">
+          <div style="font-size:1.5rem;margin-bottom:0.5rem;color:var(--white-fixed);"><svg class="icon"><use href="#i-arrow-up-right"/></svg></div>
           <h4 style="margin-bottom:0.5rem;font-size:1rem;font-weight:700;color:var(--white-fixed);">NIVX App is Live!</h4>
           <p style="font-size:0.82rem;color:rgba(255,255,255,0.7);margin-bottom:1rem;">Experience the future of digital finance today.</p>
           <a href="https://nivx-1016580972323.asia-southeast1.run.app" target="_blank" style="display:inline-flex;align-items:center;gap:0.5rem;background:var(--gold);color:var(--navy-fixed);font-weight:800;font-size:0.88rem;padding:0.65rem 1.5rem;border-radius:9px;text-decoration:none;transition:var(--transition);">Open NIVX App →</a>
@@ -1848,11 +1928,11 @@
         <div style="margin-top:2rem;background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;">
           <h4 style="margin-bottom:1.25rem;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--white-muted);">Inquiry Types</h4>
           <div style="display:flex;flex-direction:column;gap:0.75rem;">
-            <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.88rem;color:var(--white-dim);"><span>💼</span> Investor Relations & Funding</div>
-            <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.88rem;color:var(--white-dim);"><span>🤝</span> Technology & API Partnerships</div>
-            <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.88rem;color:var(--white-dim);"><span>📰</span> Media & Press Coverage</div>
-            <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.88rem;color:var(--white-dim);"><span>🏦</span> Financial Institution Partnerships</div>
-            <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.88rem;color:var(--white-dim);"><span>👥</span> Career & Team Building</div>
+            <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.88rem;color:var(--white-dim);"><span><svg class="icon"><use href="#i-briefcase"/></svg></span> Investor Relations & Funding</div>
+            <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.88rem;color:var(--white-dim);"><span><svg class="icon"><use href="#i-handshake"/></svg></span> Technology & API Partnerships</div>
+            <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.88rem;color:var(--white-dim);"><span><svg class="icon"><use href="#i-newspaper"/></svg></span> Media & Press Coverage</div>
+            <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.88rem;color:var(--white-dim);"><span><svg class="icon"><use href="#i-landmark"/></svg></span> Financial Institution Partnerships</div>
+            <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.88rem;color:var(--white-dim);"><span><svg class="icon"><use href="#i-users"/></svg></span> Career & Team Building</div>
           </div>
         </div>
       </div>
@@ -1920,12 +2000,12 @@
       <p>India's most trusted digital ownership ecosystem. Discover, verify, invest, learn, and grow — through one intelligent financial platform.</p>
       <div class="footer-socials" style="margin-top:1.25rem;flex-wrap:wrap;gap:0.6rem;">
         <a href="https://www.linkedin.com/company/nivx/?utm_source=ig&utm_medium=social&utm_content=link_in_bio" target="_blank" title="LinkedIn Company">in</a>
-        <a href="https://www.instagram.com/nivx2026?igsh=MTJubm15Z3ViY2hneg==" target="_blank" title="Instagram">📷</a>
-        <a href="https://youtube.com/@nivx-i9q?si=EEcVGDPvTAX_HkXm" target="_blank" title="YouTube">▶</a>
+        <a href="https://www.instagram.com/nivx2026?igsh=MTJubm15Z3ViY2hneg==" target="_blank" title="Instagram"><svg class="icon"><use href="#i-camera"/></svg></a>
+        <a href="https://youtube.com/@nivx-i9q?si=EEcVGDPvTAX_HkXm" target="_blank" title="YouTube"><svg class="icon"><use href="#i-play"/></svg></a>
         <a href="https://www.threads.com/@nivx2026" target="_blank" title="Threads" style="font-size:0.85rem;font-weight:700;">𝕿</a>
         <a href="https://www.facebook.com/share/18kaqveAF9/" target="_blank" title="Facebook" style="font-weight:700;">f</a>
         <a href="https://x.com/NIVX121X" target="_blank" title="X (Twitter)" style="font-weight:800;font-size:0.85rem;">𝕏</a>
-        <a href="https://whatsapp.com/channel/0029VbCvJN9JuyAHNUUP9T3C" target="_blank" title="WhatsApp Channel" style="font-size:0.9rem;">💬</a>
+        <a href="https://whatsapp.com/channel/0029VbCvJN9JuyAHNUUP9T3C" target="_blank" title="WhatsApp Channel" style="font-size:0.9rem;"><svg class="icon"><use href="#i-message-circle"/></svg></a>
       </div>
     </div>
     <div class="footer-col">
@@ -1954,7 +2034,7 @@
   <div class="footer-bottom">
     <span>© 2025 NIVX. All rights reserved. Building India's Financial Future.</span>
     <div style="display:flex;align-items:center;gap:1.5rem;">
-      <a href="https://nivx-1016580972323.asia-southeast1.run.app" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;background:linear-gradient(135deg,var(--gold),var(--gold-bright));color:var(--navy-fixed);font-size:0.78rem;font-weight:800;padding:0.45rem 1rem;border-radius:7px;text-decoration:none;letter-spacing:0.03em;transition:var(--transition);">🚀 Open App</a>
+      <a href="https://nivx-1016580972323.asia-southeast1.run.app" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;background:linear-gradient(135deg,var(--gold),var(--gold-bright));color:var(--navy-fixed);font-size:0.78rem;font-weight:800;padding:0.45rem 1rem;border-radius:7px;text-decoration:none;letter-spacing:0.03em;transition:var(--transition);"><svg class="icon"><use href="#i-arrow-up-right"/></svg> Open App</a>
       <span style="color:var(--white-muted);font-size:0.72rem;">Made in India 🇮🇳</span>
     </div>
   </div>
@@ -1966,13 +2046,13 @@
 <div class="feedback-widget">
   <div class="feedback-card" id="feedbackCard">
     <button class="feedback-close" onclick="toggleFeedback()" aria-label="Close">×</button>
-    <div class="feedback-icon">💬</div>
+    <div class="feedback-icon"><svg class="icon"><use href="#i-message-circle"/></svg></div>
     <h4>Help Shape NIVX</h4>
     <p>Your input directly shapes our roadmap — tell us what's working, what's missing, and what you'd like to see next.</p>
     <a class="feedback-cta" href="https://prettyform.addxt.com/a/form/vf/1FAIpQLSe7m-OJROKLsp0qId8hSMt2YqZR8WmJDDLjBbHg7KIRRYXtAg" target="_blank" rel="noopener">Share Your Feedback →</a>
   </div>
   <button class="feedback-btn" id="feedbackBtn" onclick="toggleFeedback()" aria-label="Give feedback" aria-expanded="false">
-    <span class="feedback-btn-icon">💬</span>
+    <span class="feedback-btn-icon"><svg class="icon"><use href="#i-message-circle"/></svg></span>
     <span class="feedback-btn-label">Feedback</span>
   </button>
 </div>
@@ -2040,8 +2120,8 @@ function drawHeroChart() {
 
   // area fill
   const grad = ctx.createLinearGradient(0, 0, 0, h);
-  grad.addColorStop(0, 'rgba(30,86,200,0.3)');
-  grad.addColorStop(1, 'rgba(30,86,200,0)');
+  grad.addColorStop(0, 'rgba(11,18,32,0.3)');
+  grad.addColorStop(1, 'rgba(11,18,32,0)');
   ctx.beginPath();
   ctx.moveTo(pts[0].x, h);
   ctx.lineTo(pts[0].x, pts[0].y);
@@ -2055,7 +2135,7 @@ function drawHeroChart() {
   ctx.beginPath();
   ctx.moveTo(pts[0].x, pts[0].y);
   pts.slice(1).forEach(p => ctx.lineTo(p.x, p.y));
-  ctx.strokeStyle = '#3d82ff';
+  ctx.strokeStyle = '#0B1220';
   ctx.lineWidth = 2;
   ctx.stroke();
 
@@ -2063,7 +2143,7 @@ function drawHeroChart() {
   const last = pts[pts.length-1];
   ctx.beginPath();
   ctx.arc(last.x, last.y, 4, 0, Math.PI*2);
-  ctx.fillStyle = '#3d82ff';
+  ctx.fillStyle = '#C8A96A';
   ctx.fill();
 }
 window.addEventListener('load', drawHeroChart);
@@ -2081,7 +2161,7 @@ function joinWaitlist() {
 function submitContact() {
   const req = ['firstName','lastName','contactEmail','inquiryType','message'];
   let valid = true;
-  req.forEach(id => { const el = document.getElementById(id); if (!el.value.trim()) { el.style.borderColor='rgba(255,80,80,0.6)'; valid=false; } else { el.style.borderColor=''; } });
+  req.forEach(id => { const el = document.getElementById(id); if (!el.value.trim()) { el.style.borderColor='rgba(163,52,42,0.6)'; valid=false; } else { el.style.borderColor=''; } });
   if (!valid) { alert('Please fill in all required fields.'); return; }
   document.getElementById('formSuccess').style.display = 'block';
   ['firstName','lastName','contactEmail','contactPhone','inquiryType','organization','message'].forEach(id => { document.getElementById(id).value = ''; });
@@ -2125,7 +2205,7 @@ function buildFaqList(filter='all') {
     <div class="faq-item" id="faq-${i}" onclick="toggleFaq('faq-${i}')">
       <div class="faq-q">
         <span>${f.q}</span>
-        <span class="faq-arrow">▾</span>
+        <span class="faq-arrow"><svg class="icon"><use href="#i-chevron-down"/></svg></span>
       </div>
       <div class="faq-a">${f.a}</div>
     </div>
