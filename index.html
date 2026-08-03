@@ -113,7 +113,8 @@
     text-decoration: none; letter-spacing: 0.01em;
     transition: var(--transition); cursor: pointer;
   }
-  .nav-links a:hover, .nav-links a.active { color: var(--white); }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a.active { color: var(--white); font-weight: 700; }
 
   .nav-cta {
     background: transparent !important;
@@ -124,6 +125,7 @@
     transition: var(--transition) !important;
   }
   .nav-cta:hover { border-color: var(--white); background: rgba(11,18,32,0.03) !important; transform: none; }
+  .nav-cta.active { font-weight: 700 !important; border-color: var(--white); background: rgba(11,18,32,0.045) !important; }
 
   .nav-hamburger {
     display: none; flex-direction: column; gap: 5px;
@@ -150,6 +152,7 @@
     transition: var(--transition);
   }
   .mobile-menu a:hover { color: var(--white); }
+  .mobile-menu a.active { color: var(--white); font-weight: 700; background: rgba(11,18,32,0.035); border-radius: 6px; }
 
   /* ─── PAGE SYSTEM ─── */
   .page { display: none; }
@@ -990,16 +993,16 @@
 <nav id="mainNav">
   <a class="nav-logo" onclick="navigateTo('home')">NIVX</a>
   <ul class="nav-links">
-    <li><a onclick="navigateTo('home')">Home</a></li>
-    <li><a onclick="navigateTo('about')">About</a></li>
-    <li><a onclick="navigateTo('problem')">Problem</a></li>
-    <li><a onclick="navigateTo('features')">Features</a></li>
-    <li><a onclick="navigateTo('ecosystem')">Ecosystem</a></li>
-    <li><a onclick="navigateTo('why')">Why NIVX</a></li>
-    <li><a onclick="navigateTo('vision')">Vision</a></li>
-    <li><a onclick="navigateTo('founder')">Founder</a></li>
-    <li><a onclick="navigateTo('faq')">FAQ</a></li>
-    <li><a onclick="navigateTo('contact')" class="nav-cta">Contact</a></li>
+    <li><a data-page="home" class="active" onclick="navigateTo('home')">Home</a></li>
+    <li><a data-page="about" onclick="navigateTo('about')">About</a></li>
+    <li><a data-page="problem" onclick="navigateTo('problem')">Problem</a></li>
+    <li><a data-page="features" onclick="navigateTo('features')">Features</a></li>
+    <li><a data-page="ecosystem" onclick="navigateTo('ecosystem')">Ecosystem</a></li>
+    <li><a data-page="why" onclick="navigateTo('why')">Why NIVX</a></li>
+    <li><a data-page="vision" onclick="navigateTo('vision')">Vision</a></li>
+    <li><a data-page="founder" onclick="navigateTo('founder')">Founder</a></li>
+    <li><a data-page="faq" onclick="navigateTo('faq')">FAQ</a></li>
+    <li><a data-page="contact" onclick="navigateTo('contact')" class="nav-cta">Contact</a></li>
     <li><a onclick="navigateTo('home'); setTimeout(() => { const el = document.getElementById('waitlistEmail'); if (el) { el.scrollIntoView({behavior:'smooth', block:'center'}); el.focus(); } }, 500);" class="nav-cta">Join Waitlist</a></li>
     <li><a href="https://nivx-1016580972323.asia-southeast1.run.app" target="_blank" style="background:linear-gradient(135deg,var(--blue),var(--blue-bright));color:var(--white-fixed)!important;-webkit-text-fill-color:var(--white-fixed)!important;padding:0.45rem 1.1rem;border-radius:8px;font-weight:700!important;font-size:0.82rem!important;"><svg class="icon"><use href="#i-arrow-up-right"/></svg> Open App</a></li>
   </ul>
@@ -1009,16 +1012,16 @@
 </nav>
 
 <div class="mobile-menu" id="mobileMenu">
-  <a onclick="navigateTo('home');toggleMenu()">Home</a>
-  <a onclick="navigateTo('about');toggleMenu()">About</a>
-  <a onclick="navigateTo('problem');toggleMenu()">Problem</a>
-  <a onclick="navigateTo('features');toggleMenu()">Features</a>
-  <a onclick="navigateTo('ecosystem');toggleMenu()">Ecosystem</a>
-  <a onclick="navigateTo('why');toggleMenu()">Why NIVX</a>
-  <a onclick="navigateTo('vision');toggleMenu()">Vision</a>
-  <a onclick="navigateTo('founder');toggleMenu()">Founder</a>
-  <a onclick="navigateTo('faq');toggleMenu()">FAQ</a>
-  <a onclick="navigateTo('contact');toggleMenu()">Contact</a>
+  <a data-page="home" class="active" onclick="navigateTo('home');toggleMenu()">Home</a>
+  <a data-page="about" onclick="navigateTo('about');toggleMenu()">About</a>
+  <a data-page="problem" onclick="navigateTo('problem');toggleMenu()">Problem</a>
+  <a data-page="features" onclick="navigateTo('features');toggleMenu()">Features</a>
+  <a data-page="ecosystem" onclick="navigateTo('ecosystem');toggleMenu()">Ecosystem</a>
+  <a data-page="why" onclick="navigateTo('why');toggleMenu()">Why NIVX</a>
+  <a data-page="vision" onclick="navigateTo('vision');toggleMenu()">Vision</a>
+  <a data-page="founder" onclick="navigateTo('founder');toggleMenu()">Founder</a>
+  <a data-page="faq" onclick="navigateTo('faq');toggleMenu()">FAQ</a>
+  <a data-page="contact" onclick="navigateTo('contact');toggleMenu()">Contact</a>
   <a onclick="navigateTo('home');toggleMenu(); setTimeout(() => { const el = document.getElementById('waitlistEmail'); if (el) { el.scrollIntoView({behavior:'smooth', block:'center'}); el.focus(); } }, 500);">Join Waitlist</a>
   <a href="https://nivx-1016580972323.asia-southeast1.run.app" target="_blank" style="color:var(--gold-bright)!important;font-weight:700;"><svg class="icon"><use href="#i-arrow-up-right"/></svg> Open App</a>
 </div>
@@ -2055,7 +2058,9 @@
 function navigateTo(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + page).classList.add('active');
-  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.querySelectorAll('.nav-links a[data-page], .mobile-menu a[data-page]').forEach(a => {
+    a.classList.toggle('active', a.dataset.page === page);
+  });
   window.scrollTo({ top: 0, behavior: 'smooth' });
   setTimeout(initFadeIns, 100);
   if (page === 'faq') buildFaqList();
