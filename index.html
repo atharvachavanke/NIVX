@@ -108,13 +108,13 @@
   .nav-logo-badge {
     display: inline-flex; align-items: center; justify-content: center;
     background: var(--blue);
-    border-radius: 8px;
-    padding: 5px 8px;
-    gap: 6px;
+    border-radius: 9px;
+    padding: 7px 10px;
+    gap: 8px;
     flex-shrink: 0;
   }
-  .nav-logo-badge .nav-logo-mark { height: 18px; }
-  .nav-wordmark { height: 15px; width: auto; display: block; }
+  .nav-logo-badge .nav-logo-mark { height: 24px; }
+  .nav-wordmark { height: 20px; width: auto; display: block; }
   .nav-logo-badge-lg { padding: 6px 9px; border-radius: 9px; gap: 7px; }
   .nav-logo-badge-lg .nav-logo-mark { height: 21px; }
   .nav-wordmark-lg { height: 17px; width: auto; display: block; }
@@ -684,9 +684,9 @@
     max-width: 1280px; margin-left: auto; margin-right: auto;
   }
   .founder-avatar {
-    width: 200px; height: 200px; border-radius: 50%;
+    width: 280px; height: 280px; border-radius: 50%;
     background: var(--navy-surface);
-    border: 1.5px solid var(--gold);
+    border: 2px solid var(--gold);
     display: flex; align-items: center; justify-content: center;
     font-family: var(--font-display); font-size: 4rem; font-weight: 600;
     color: var(--gold-bright); margin: 0 auto;
@@ -902,6 +902,45 @@
     display: flex; flex-direction: column; align-items: flex-end; gap: 0.75rem;
     pointer-events: none;
   }
+  .video-modal {
+    position: fixed; inset: 0; z-index: 2000;
+    background: rgba(11,18,32,0.85);
+    display: flex; align-items: center; justify-content: center;
+    padding: 3rem 5%;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+  }
+  .video-modal.open {
+    opacity: 1; visibility: visible;
+    transition: opacity 0.3s ease;
+  }
+  .video-modal-inner {
+    width: 100%; max-width: 960px;
+    position: relative;
+    transform: scale(0.96);
+    transition: transform 0.3s ease;
+  }
+  .video-modal.open .video-modal-inner { transform: scale(1); }
+  .video-modal-frame {
+    position: relative; width: 100%;
+    padding-top: 56.25%;
+    background: #000;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+  }
+  .video-modal-frame iframe {
+    position: absolute; inset: 0; width: 100%; height: 100%; border: none;
+  }
+  .video-modal-close {
+    position: absolute; top: -46px; right: 0;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25);
+    color: var(--white-fixed); width: 36px; height: 36px; border-radius: 50%;
+    font-size: 1.4rem; line-height: 1; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: var(--transition);
+  }
+  .video-modal-close:hover { background: rgba(255,255,255,0.2); }
   .feedback-btn {
     display: inline-flex; align-items: center; gap: 0.55rem;
     background: var(--blue);
@@ -1217,7 +1256,10 @@
     <div class="section-label">About NIVX</div>
     <h1 class="section-title">Building India's Most Trusted<br>Digital Ownership Ecosystem</h1>
     <p class="section-sub" style="margin-top:1rem;">NIVX is not just another fintech app. It is a complete operating system for your financial life.</p>
-    <a href="NIVX-Pitch-Deck.pdf" target="_blank" class="btn-secondary" style="margin-top:1.75rem;"><svg class="icon"><use href="#i-newspaper"/></svg> View Pitch Deck</a>
+    <div style="display:flex;flex-wrap:wrap;gap:1rem;margin-top:1.75rem;">
+      <a href="NIVX-Pitch-Deck.pdf" target="_blank" class="btn-secondary"><svg class="icon"><use href="#i-newspaper"/></svg> View Pitch Deck</a>
+      <button class="btn-secondary" onclick="openVideoModal()"><svg class="icon"><use href="#i-play"/></svg> Watch the Story</button>
+    </div>
   </div>
 
   <section>
@@ -2084,6 +2126,13 @@
   </button>
 </div>
 
+<div class="video-modal" id="videoModal" onclick="if(event.target===this) closeVideoModal()">
+  <div class="video-modal-inner">
+    <button class="video-modal-close" onclick="closeVideoModal()" aria-label="Close video">×</button>
+    <div class="video-modal-frame" id="videoModalFrame"></div>
+  </div>
+</div>
+
 <!-- ═══════════════════════════════════
      SCRIPTS
 ═══════════════════════════════════ -->
@@ -2110,6 +2159,23 @@ function toggleFeedback() {
   const isOpen = card.classList.toggle('open');
   document.getElementById('feedbackBtn').setAttribute('aria-expanded', isOpen);
 }
+
+// ─── VIDEO MODAL ───
+function openVideoModal() {
+  document.getElementById('videoModalFrame').innerHTML =
+    '<iframe src="https://www.youtube.com/embed/TFRtfIvZISY?autoplay=1&rel=0" title="NIVX" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+  document.getElementById('videoModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeVideoModal() {
+  document.getElementById('videoModal').classList.remove('open');
+  document.getElementById('videoModalFrame').innerHTML = '';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeVideoModal();
+});
+
 document.addEventListener('click', (e) => {
   const widget = document.querySelector('.feedback-widget');
   if (widget && !widget.contains(e.target)) {
